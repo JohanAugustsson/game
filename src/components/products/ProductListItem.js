@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function ProductListItem(props) {
-
+  const amount = props.cart.find( item => item.id === props.product.id)
   return (
     <div className="productListItem" >
       <h3> {props.product.name}</h3>
@@ -16,9 +16,7 @@ export default function ProductListItem(props) {
         <button
           onClick={ props.addToCart }>
           Add to cart
-          <span>
-            { props.cart && props.cart[props.product.id] }
-          </span>
+           {amount ? amount.quantity : "0"}
         </button>
       </div>
 
