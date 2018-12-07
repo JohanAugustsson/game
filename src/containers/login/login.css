@@ -1,0 +1,14 @@
+
+.container-loign{
+  display: flex;
+}
+
+
+.btn1 {
+  display: inline-block;
+  color: rgb(87, 188, 212);
+  border-radius: 10px;
+  font-size: 10px;
+  height: 50px;
+  width: 100px;
+}
