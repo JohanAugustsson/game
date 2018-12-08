@@ -13,7 +13,8 @@
     "react-scripts": "^2.1.1",
     "redux": "^4.0.1",
     "redux-firestore": "^0.6.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "prop-types": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -29,6 +30,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@storybook/addon-actions": "^4.0.12",
     "@storybook/react": "^4.0.12",
     "@types/react": "^16.7.13",
     "babel-core": "^6.26.3",

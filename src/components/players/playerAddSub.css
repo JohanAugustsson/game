@@ -1,0 +1,9 @@
+
+.game-form {
+    display: flex;
+    align-items: center;
+}
+
+.margin {
+    margin: 10px;
+}
