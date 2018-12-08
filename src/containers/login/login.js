@@ -35,9 +35,9 @@ class Login extends Component{
       <div className={'container-loign'}>
         <div className={'form'}>
           Email: <input value={email}  onChange={(e)=> this.updateInput(e,'email')}/>
-          Password: <input value={password}  onChange={(e)=> this.updateInput(e,'password')}/>
-          firstName: <input value={firstName}  onChange={(e)=> this.updateInput(e,'firstName')}/>
-          lastName: <input value={lastName}  onChange={(e)=> this.updateInput(e,'lastName')}/>
+          Lösenord: <input value={password}  onChange={(e)=> this.updateInput(e,'password')}/>
+          Förnamn: <input value={firstName}  onChange={(e)=> this.updateInput(e,'firstName')}/>
+          Efternamn: <input value={lastName}  onChange={(e)=> this.updateInput(e,'lastName')}/>
           <Button variant={'primary'} onClick={this.createUser}> Skapa användare </Button>
         </div>
       </div>

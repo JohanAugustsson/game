@@ -27,7 +27,6 @@ function getUsersFromFirestore(user) {
     console.log('users:', users);
     return users;
   });
-
 }
 
 

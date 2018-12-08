@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-// import "./Game.css";
+import "./Game.css";
 import { createNewUser } from '../../actions/authAction'
 import { getUsersFromDatabase } from '../../actions/userActions'
+import { getGamesFromDatabase } from '../../actions/gameActions'
 import Button from '../../atoms/buttons/buttons';
+import GameView from './GameView';
 
 class Game extends Component{
   constructor(props){
@@ -13,9 +15,12 @@ class Game extends Component{
       gameName:'',
     }
 
-    const { users, dispatch } = props;
+    const { users, games, dispatch } = props;
     if ( !users.isFetched ){
       dispatch(getUsersFromDatabase());
+    }
+    if ( !games.isFetched ){
+      dispatch(getGamesFromDatabase());
     }
   }
   updateInput = (e,stateKey)=> {
@@ -37,10 +42,15 @@ class Game extends Component{
   render(){
     const { email, password, firstName, lastName } = this.state;
     return(
-      <div className={'container-loign'}>
-        <div className={'form'}>
-          <Button variant={'btn-add'} onClick={this.createUser}> + </Button>
+      <div className={'container-game'}>
+        <div className={'wrapper-game'}>
+          <div>first</div>
+          <div>mitt</div>
+          <div>last</div>
         </div>
+        <GameView />
+
+        <Button variant={'btn-add'} onClick={this.createUser}> + </Button>
       </div>
     )
   }
@@ -49,6 +59,7 @@ class Game extends Component{
 const mapStateToProps = (state) => ({
   cart : state.cart,
   users: state.users,
+  games: state.games,
 })
 
 export default connect(mapStateToProps)(Game)
