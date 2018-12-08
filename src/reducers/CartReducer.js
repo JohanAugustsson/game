@@ -3,15 +3,15 @@ const ADD = "ADD";
 const REMOVE = "REMOVE";
 const initialState = []
 
-const CartReducer= (state= initialState,action) =>{
+const CartReducer= (state= initialState, {type, payload}) =>{
 
-  switch (action.type) {
+  switch (type) {
     case ADD: {
-      return [...state, action.payload]
+      return [...state, payload]
     }
     case REMOVE: {
 
-      const firstMatchIndex = state.indexOf(action.payload);
+      const firstMatchIndex = state.indexOf(payload);
       return state.filter( (item,index) => index !== firstMatchIndex )
     }
     default:

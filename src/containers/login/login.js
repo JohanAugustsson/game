@@ -11,39 +11,31 @@ class Login extends Component{
   constructor(props){
     super(props);
     this.state = {
-      name: "",
+      email: "",
       password: "",
     }
   }
   updateInput = (e,stateKey)=> {
-    console.log("hej", e.target.value);
     this.setState({ [stateKey]: e.target.value });
   }
 
-  test = () => {
-    console.log("hej");
-  }
-
   createUser = () =>{
-    console.log("skapar användare");
     const { dispatch } = this.props;
-    const { name , password } = this.state;
+    const { email , password } = this.state;
     const data = {
-      name,
+      email,
       password
     }
     dispatch(createNewUser(data));
   }
 
   render(){
-    const { name, password } = this.state;
+    const { email, password } = this.state;
     return(
       <div className={'container-loign'}>
-        Login
-
-        Name: <input value={name}  onChange={(e)=> this.updateInput(e,'name')}/>
+        Name: <input value={email}  onChange={(e)=> this.updateInput(e,'email')}/>
         Password: <input value={password}  onChange={(e)=> this.updateInput(e,'password')}/>
-        <BtnPrimary onClick={this.createUser}> Logga in </BtnPrimary>
+        <BtnPrimary onClick={this.createUser}> Skapa användare </BtnPrimary>
       </div>
     )
   }
