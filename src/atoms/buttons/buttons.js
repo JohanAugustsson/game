@@ -6,12 +6,12 @@ const buttonStyle = {
 };
 
 function BtnPrimary (props) {
-  const label = props.label ? props.label : 'missing';
+  const children = props.children ? props.children : 'missing';
   return (
     <button
-    className="btnPrim"
+    className="btnPrimary"
     style={buttonStyle}
-    onClick={props.onClick }>{label}</button>
+    onClick={props.onClick }>{children}</button>
   );
 }
 const BtnSecondary = (props)=>{
