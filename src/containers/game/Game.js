@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import Button from '../../atoms/buttons/buttons';
+// import "./Game.css";
 import { createNewUser } from '../../actions/authAction'
-import "./login.css";
+import { getUsersFromDatabase } from '../../actions/userActions'
+import Button from '../../atoms/buttons/buttons';
 
-class Login extends Component{
+class Game extends Component{
   constructor(props){
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      firstName: '',
+      gameId: '',
+      gameName:'',
+    }
+
+    const { users, dispatch } = props;
+    if ( !users.isFetched ){
+      dispatch(getUsersFromDatabase());
     }
   }
   updateInput = (e,stateKey)=> {
@@ -34,11 +39,7 @@ class Login extends Component{
     return(
       <div className={'container-loign'}>
         <div className={'form'}>
-          Email: <input value={email}  onChange={(e)=> this.updateInput(e,'email')}/>
-          Password: <input value={password}  onChange={(e)=> this.updateInput(e,'password')}/>
-          firstName: <input value={firstName}  onChange={(e)=> this.updateInput(e,'firstName')}/>
-          lastName: <input value={lastName}  onChange={(e)=> this.updateInput(e,'lastName')}/>
-          <Button variant={'primary'} onClick={this.createUser}> Skapa användare </Button>
+          <Button variant={'btn-add'} onClick={this.createUser}> + </Button>
         </div>
       </div>
     )
@@ -46,7 +47,8 @@ class Login extends Component{
 }
 
 const mapStateToProps = (state) => ({
-  cart : state.cart
+  cart : state.cart,
+  users: state.users,
 })
 
-export default connect(mapStateToProps)(Login)
+export default connect(mapStateToProps)(Game)

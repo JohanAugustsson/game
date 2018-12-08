@@ -17,12 +17,12 @@ var config = {
 };
 
 firebase.initializeApp(config);
-
+const firestore = firebase.firestore();
 
 const config = {
-  enableLogging: false,
   timestampsInSnapshots: true,
 };
+firestore.settings(config);
 
 
 // const rootReducer = combineReducers({

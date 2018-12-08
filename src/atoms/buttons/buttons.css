@@ -1,4 +1,9 @@
-.btnPrimary {
+.primary {
+  background-color: rgb(83, 224, 148);
+  padding: 5px;
+  border-radius: 2px;
+}
+.default {
   background-color: rgb(83, 224, 148);
   padding: 5px;
   border-radius: 2px;

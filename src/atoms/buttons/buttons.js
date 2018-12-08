@@ -5,23 +5,45 @@ const buttonStyle = {
   margin: '10px 10px 10px 0'
 };
 
-function BtnPrimary (props) {
-  const children = props.children ? props.children : 'missing';
+function Button (props) {
+  if ( props.variant ==='primary') return PrimaryBtn(props);
+  if ( props.variant ==='btn-add') return BtnAdd(props);
+
+
+  const children = props.children || 'missing';
+  const variant = props.variant || 'default'
   return (
     <button
-    className="btnPrimary"
+    className={variant}
     style={buttonStyle}
     onClick={props.onClick }>{children}</button>
   );
 }
-const BtnSecondary = (props)=>{
+
+
+
+function PrimaryBtn(props){
+  const children = props.children || 'missing';
+  const variant = props.variant || 'default'
   return (
     <button
-    className="btn btn-default"
+    className={variant}
     style={buttonStyle}
-    onClick={props.handleClick}>{props.label}</button>
+    onClick={props.onClick }>{children}</button>
+  );
+}
+
+function BtnAdd(props){
+  const children = props.children || 'missing';
+  const variant = props.variant || 'default'
+  return (
+    <button
+    className={variant}
+    style={buttonStyle}
+    onClick={props.onClick }>{children}</button>
   );
 }
 
 
-export { BtnPrimary, BtnSecondary };
+
+export default Button;
