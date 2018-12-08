@@ -7,14 +7,16 @@ const initialState = {
   isFetched: false,
   isFetching: false,
   data: {},
-  members: {}
+  members: [],
 }
 
 const GameReducer = (state= initialState, {type, payload}) =>{
 
   switch (type) {
     case ADD_USER_TO_GAME: {
-      return {...state, members: payload }
+      const newMembers = [...state.members];
+      newMembers.push(payload);
+      return {...state, members: newMembers }
     }
     case ADD_GAME: {
       return {...state, data: payload, isFetched: true }

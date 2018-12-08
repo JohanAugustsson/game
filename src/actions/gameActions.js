@@ -25,6 +25,7 @@ const setAllGames = (payload) => ({
 })
 
 const addUserToGame = (data) => async (dispatch) => {
+  console.log("användare:",data);
   return addUserToGameInFirestore(data).then((users)=>{
     console.log('funkars');
     dispatch(addUser(data));
@@ -58,10 +59,19 @@ function addGameInFirestore(game) {
 
 
 const getGamesFromDatabase = (data) => async (dispatch) => {
-  return getGamesFromFirestore().then((games)=>{
-    console.log('funkars');
-    dispatch(setAllGames(games));
-  });
+  return getGamesFromFirestore().then((games)=> {
+
+    const promises = [];
+    Object.values(games).forEach(game =>{
+      promises.push(getMemberList(game));
+    })
+
+    return Promise.all(promises);
+    }).then((populatedGames)=>{
+
+      console.log('populatedGames', populatedGames);
+      dispatch(setAllGames(populatedGames));
+    });
 };
 
 function getGamesFromFirestore(user) {
@@ -81,4 +91,24 @@ function getGamesFromFirestore(user) {
 }
 
 
-export { addUserToGame, addGame, getGamesFromDatabase };
+const getMemberList = (game) => {
+  console.log("inne i getMemberList", game);
+
+  return firebase.firestore()
+    .collection("gameMembers")
+    .where('gameId', '==', game.id)
+    .get()
+    .then(function(querySnapshot) {
+    const members = {};
+    querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        members[doc.id] = doc.data();
+    });
+    console.log('members:', members);
+    game.members = members;
+    return game;
+  });
+}
+
+export { addUserToGame, addGame, getGamesFromDatabase, setGame };

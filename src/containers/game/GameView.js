@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import "./Game.css";
-import { addUserToGame, addGame } from '../../actions/gameActions'
+import { addUserToGame, addGame, setGame } from '../../actions/gameActions'
 
 import Button from '../../atoms/buttons/buttons';
 
@@ -29,34 +29,36 @@ class GameView extends Component{
   createUserList = () => {
     const users = this.props.users.data;
     const {currentGame} = this.props;
-
+    const gameId = currentGame.data.id;
     if (!users) return null;
 
 
     return Object.values(users).map(user=>(
       <li>
         {user.firstName}
-        <Button variant={'btn-add'} onClick={()=> this.addToGame({uid: user.uid, })}> Hemma </Button>
-        <Button variant={'btn-add'}> Borta </Button>
+        <Button variant={'btn-add'} onClick={()=> this.addToGame({uid: user.uid, gameId, team:'Home' })}> Hemma </Button>
+        <Button variant={'btn-add'} onClick={()=> this.addToGame({uid: user.uid, gameId, team:'Away' })}> Borta </Button>
       </li>
     ));
   }
   createGameList = () => {
     const games = this.props.games.data;
+    const { dispatch } = this.props;
     if (!games) return null;
 
-    return Object.values(games).map(games=>(
+    return Object.values(games).map(game =>(
       <li>
-        {games.title}
-        <Button variant={'btn-add'} > Select </Button>
+        {game.title}
+        <Button variant={'btn-add'}  onClick={()=> dispatch(setGame(game))} > Select </Button>
 
       </li>
     ));
   }
 
-  addToGame = () =>{
+
+  addToGame = (data) =>{
     const { dispatch } = this.props;
-    dispatch(addUserToGame())
+    dispatch(addUserToGame(data))
   }
 
   createGame = () => {
@@ -68,6 +70,7 @@ class GameView extends Component{
     const { email, password, firstName, lastName } = this.state;
     const userList = this.createUserList();
     const gameList = this.createGameList();
+
 
     return(
       <div className={'container-game'}>
