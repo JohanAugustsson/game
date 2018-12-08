@@ -2,6 +2,10 @@
 .container-loign{
   display: flex;
 }
+.container-loign .form{
+  display: flex;
+  flex-direction: column;
+}
 
 
 .btn1 {

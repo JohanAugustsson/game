@@ -2,17 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import firebase from "firebase";
 import "./login.css";
-import { createNewUser } from '../../actions/auth'
+import { createNewUser } from '../../actions/authAction'
 import { BtnPrimary } from '../../atoms/buttons/buttons';
-
-console.log(firebase);
 
 class Login extends Component{
   constructor(props){
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
+      firstName: '',
     }
   }
   updateInput = (e,stateKey)=> {
@@ -21,21 +20,27 @@ class Login extends Component{
 
   createUser = () =>{
     const { dispatch } = this.props;
-    const { email , password } = this.state;
+    const { email , password, firstName, lastName } = this.state;
     const data = {
       email,
-      password
+      password,
+      firstName,
+      lastName,
     }
     dispatch(createNewUser(data));
   }
 
   render(){
-    const { email, password } = this.state;
+    const { email, password, firstName, lastName } = this.state;
     return(
       <div className={'container-loign'}>
-        Name: <input value={email}  onChange={(e)=> this.updateInput(e,'email')}/>
-        Password: <input value={password}  onChange={(e)=> this.updateInput(e,'password')}/>
-        <BtnPrimary onClick={this.createUser}> Skapa användare </BtnPrimary>
+        <div className={'form'}>
+          Email: <input value={email}  onChange={(e)=> this.updateInput(e,'email')}/>
+          Password: <input value={password}  onChange={(e)=> this.updateInput(e,'password')}/>
+          firstName: <input value={firstName}  onChange={(e)=> this.updateInput(e,'firstName')}/>
+          lastName: <input value={lastName}  onChange={(e)=> this.updateInput(e,'lastName')}/>
+          <BtnPrimary onClick={this.createUser}> Skapa användare </BtnPrimary>
+        </div>
       </div>
     )
   }

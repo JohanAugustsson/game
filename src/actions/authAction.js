@@ -7,11 +7,10 @@ const setUser = (payload) => ({
 })
 
 const createNewUser = (data) => async (dispatch) => {
-  console.log("inne i action create new user");
-  console.log("data", data);
   const { email, password } = data;
   return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((user)=>{
+      saveUserDataToFirestore(user)
       console.log("Succeses", user);
       dispatch(setUser(user));
     })
@@ -22,5 +21,15 @@ const createNewUser = (data) => async (dispatch) => {
 
   });
 }
+
+
+function saveUserDataToFirestore(user) {
+  const {firestore} = firebase;
+  const data = {
+    firstName: user.firstName
+  }
+  return firestore().collection('users').doc().set(data);
+}
+
 
 export { createNewUser };
