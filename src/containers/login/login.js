@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Button from '../../atoms/buttons/buttons';
-import { createNewUser } from '../../actions/authAction'
+import { createNewUser } from '../../store/actions/authAction'
 import "./login.css";
 
 class Login extends Component{

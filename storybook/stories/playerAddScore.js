@@ -4,9 +4,9 @@ import {action} from '@storybook/addon-actions';
 import PlayerAddSub from "../../src/components/players/PlayerAddSub";
 
 export const player = {
-    id: '1',
+    uid: '1',
     name: 'Bill',
-    value: '1',
+    value: 1,
 };
 
 export const actions = {
@@ -15,4 +15,4 @@ export const actions = {
 };
 
 
-storiesOf('Player', module).add('default', () => <PlayerAddSub task={player} {...actions} />);
+storiesOf('Player', module).add('default', () => <PlayerAddSub player={player} {...actions} />);

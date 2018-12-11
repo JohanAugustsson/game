@@ -11,7 +11,6 @@ const createNewUser = (data) => async (dispatch) => {
   return firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((response)=>{
       const { uid } = response.user;
-      console.log(response);
       const data = {
         firstName,
         lastName,
@@ -22,7 +21,6 @@ const createNewUser = (data) => async (dispatch) => {
       dispatch(setUser(data));
     })
     .catch(function(error) {
-    console.log('something went wrong:', error);
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -33,7 +31,6 @@ const createNewUser = (data) => async (dispatch) => {
 const authentication = () =>{
     return firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        console.log('user is sigened in', user);
         // User is signed in.
         var displayName = user.displayName;
         var email = user.email;

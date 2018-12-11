@@ -8,8 +8,6 @@ const initialState = {
 }
 
 const AllGamesReducer = (state= initialState, {type, payload}) =>{
-  console.log('denna ska funk');
-  console.log('all games',payload);
   switch (type) {
     case SET_ALL_GAMES: {
       return {...state, data: payload, isFetched: true }

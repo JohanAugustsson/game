@@ -8,7 +8,6 @@ const setUsers = (payload) => ({
 
 const getUsersFromDatabase = (data) => async (dispatch) => {
   return getUsersFromFirestore().then((users)=>{
-    console.log('funkars');
     dispatch(setUsers(users));
   });
 };
@@ -20,11 +19,8 @@ function getUsersFromFirestore(user) {
     .then(function(querySnapshot) {
     const users = {};
     querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
         users[doc.id] = doc.data();
     });
-    console.log('users:', users);
     return users;
   });
 }
