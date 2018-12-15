@@ -1,9 +1,9 @@
 import firebase from "firebase";
 import {GAME_ACTIVITY_ADD_ALL, GAME_ACTIVITY_ADD_SCORE} from "../reducers/GameActivityReducer";
 
-const COLLECTION_NAME = "game_activities";
+const COLLECTION_NAME = "gameActivity";
 
-const createGameActivity = (payload) => ({
+const addScoreActivity = (payload) => ({
     type: GAME_ACTIVITY_ADD_SCORE,
     payload
 });
@@ -13,18 +13,18 @@ const addGameActivities = (payload) => ({
     payload
 });
 
-const addGameActivity = (val) => async (dispatch) => {
+const addScoreActivityToGame = (data) => async (dispatch) => {
     let gameActivity = {};
     gameActivity.type = "SCORE";
-    gameActivity.gameId = "1";
-    gameActivity.value = val;
+    gameActivity.gameId = data.player.gameId;
+    gameActivity.value = data.value;
+    gameActivity.userId = data.player.uid;
     gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
     const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
-    gameActivity.id = docRef.uid;
-
+    gameActivity.id = docRef.id;
     docRef.set(gameActivity).then(() => {
-        dispatch(addGameActivity(gameActivity));
+        dispatch(addScoreActivity(gameActivity));
     }).catch((error) => {
         console.log('något gick fel:', error);
     });
@@ -51,4 +51,4 @@ function getGameActivitiesFromFirestore(gameId) {
         });
 }
 
-export {createGameActivity, addGameActivities};
+export {addScoreActivity, addGameActivities, addScoreActivityToGame};

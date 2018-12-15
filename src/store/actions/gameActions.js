@@ -82,6 +82,36 @@ function getGamesFromFirestore(user) {
 }
 
 
+const getGameFromDatabase = (gameId) => async (dispatch) => {
+    return getGameFromFirestore(gameId).then((games) => {
+        const promises = [];
+        Object.values(games).forEach(game => {
+            promises.push(getMemberList(game));
+            promises.push(getActivityList(game));
+        });
+
+        return Promise.all(promises);
+    }).then((games) => {
+        dispatch(setGame(games[0]));
+
+    });
+};
+
+function getGameFromFirestore(gameId) {
+    return firebase.firestore()
+        .collection("games")
+        .where("id", "==", gameId)
+        .get()
+        .then(function (querySnapshot) {
+            const games = {};
+            querySnapshot.forEach(function (doc) {
+                games[doc.id] = doc.data();
+            });
+            return games;
+        });
+}
+
+
 const getMemberList = (game) => {
     return firebase.firestore()
         .collection("gameMembers")
@@ -90,11 +120,26 @@ const getMemberList = (game) => {
         .then(function (querySnapshot) {
             const members = {};
             querySnapshot.forEach(function (doc) {
-                members[doc.uid] = doc.data();
+                members[doc.id] = doc.data();
             });
             game.members = members;
             return game;
         });
 };
 
-export {addUserToGame, addGame, getGamesFromDatabase, setGame};
+const getActivityList = (game) => {
+    return firebase.firestore()
+        .collection("gameActivity")
+        .where('gameId', '==', game.id)
+        .get()
+        .then(function (querySnapshot) {
+            const activities = {};
+            querySnapshot.forEach(function (doc) {
+                activities[doc.id] = doc.data();
+            });
+            game.activities = activities;
+            return game;
+        });
+};
+
+export {addUserToGame, addGame, getGamesFromDatabase, getGameFromDatabase, setGame};
