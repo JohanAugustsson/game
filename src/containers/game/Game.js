@@ -16,11 +16,11 @@ class Game extends Component {
             gameName: '',
         };
 
-        const {users, games, dispatch} = props;
-        if (!users.isFetched) {
+        const {userIsFetched, gamesIsFetched, dispatch} = props;
+        if (!userIsFetched) {
             dispatch(getUsersFromDatabase());
         }
-        if (!games.isFetched) {
+        if (!gamesIsFetched) {
             dispatch(getGamesFromDatabase());
         }
     }
@@ -42,47 +42,57 @@ class Game extends Component {
     };
 
     renderPlayerList = () => {
-        const {currentGame} = this.props;
-        const {members} = currentGame.data;
+        const {currentGame, users } = this.props;
+        const {members} = currentGame;
         if (!members) return null;
 
         const home = [];
         const away = [];
         Object.values(members).forEach(member => {
+            console.log(member);
             if (member.team === 'Home') {
-                home.push(this.createPlayer(member));
+                home.push(this.createPlayer(users[member.uid]));
             } else {
-                away.push(this.createPlayer(member));
+                away.push(this.createPlayer(users[member.uid]));
             }
         });
         return {home, away};
     };
 
-    createPlayer = (member) => (
-        <li><PlayerAddSub player={member} onSubstract={() => console.log("sub")} onAdd={() => console.log("add")}/></li>
-    );
+    createPlayer = (member) => {
+      console.log(member);
+      return (     <li><PlayerAddSub player={member} onSubstract={() => console.log("sub")} onAdd={() => console.log("add")}/></li>)
+
+    };
+
 
     render() {
         const {email, password, firstName, lastName} = this.state;
         const {currentGame} = this.props;
 
-        const teamList = (currentGame.data && currentGame.data.members) ? this.renderPlayerList() : {
+        const teamList = (currentGame && currentGame.members) ? this.renderPlayerList() : {
             home: null,
             away: null
         };
+        const title = currentGame.title || 'Inget spel valt'
 
         return (
             <div className={'container-game'}>
                 <div className={'wrapper-game'}>
+                    <h3> {title} </h3>
                     <div>
+                      <div>
+                        Home
                         <ul>
-                            {teamList.home}
+                          {teamList.home}
                         </ul>
-                    </div>
-                    <div>
-                        <ul>
+                      </div>
+                        Away
+                        <div>
+                          <ul>
                             {teamList.away}
-                        </ul>
+                          </ul>
+                      </div>
                     </div>
                 </div>
                 <GameView/>
@@ -93,11 +103,13 @@ class Game extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    cart: state.cart,
-    users: state.users,
-    games: state.games,
-    currentGame: state.currentGame,
+const mapStateToProps = (store) => ({
+    cart: store.cart,
+    users: store.users.data,
+    usersIsFetched: store.users.isFetched,
+    games: store.games.data,
+    gameIsFetched: store.games.isFetched,
+    currentGame: store.currentGame.data,
 });
 
 export default connect(mapStateToProps)(Game)

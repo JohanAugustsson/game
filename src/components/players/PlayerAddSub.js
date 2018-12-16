@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './playerAddSub.css'
 
-function PlayerAddSub({player: {name, uid, value}, onAdd, onSubstract}) {
+function PlayerAddSub({player: {firstName, uid, value}, onAdd, onSubstract}) {
     return (
         <div className="game-form">
-            <div className="margin"> {name}</div>
+            <div className="margin"> {firstName}</div>
             <div className="margin">
                 <button onClick={() => onSubstract(uid)}> -</button>
             </div>

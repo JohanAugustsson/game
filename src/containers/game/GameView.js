@@ -29,7 +29,7 @@ class GameView extends Component {
     createUserList = () => {
         const users = this.props.users.data;
         const {currentGame} = this.props;
-        const gameId = currentGame.data.uid;
+        const gameId = currentGame.data.id;
         if (!users) return null;
 
 
@@ -65,11 +65,13 @@ class GameView extends Component {
 
     addUserToGame = (data) => {
         const {dispatch} = this.props;
+        console.log('användare data', data);
         dispatch(addUserToGame(data))
     };
 
     createGame = () => {
         const {dispatch} = this.props;
+        console.log('skapar game');
         dispatch(addGame({title: 'first Game'}));
     };
 

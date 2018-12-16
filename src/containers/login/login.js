@@ -26,6 +26,7 @@ class Login extends Component{
       firstName,
       lastName,
     }
+    console.log('skapa användare!!');
     dispatch(createNewUser(data));
   }
 

@@ -17,10 +17,12 @@ const createNewUser = (data) => async (dispatch) => {
         uid,
         email,
       }
+      console.log('nu sspara', data);
       saveUserDataToFirestore(data)
       dispatch(setUser(data));
     })
     .catch(function(error) {
+      console.log('något gick fel', error);
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -48,8 +50,9 @@ const authentication = () =>{
 };
 
 function saveUserDataToFirestore(user) {
+  console.log('user data: ',user);
   user.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-  return firebase.firestore().collection('users').doc().set(user);
+  return firebase.firestore().collection('users').doc(user.uid).set(user);
 }
 
 

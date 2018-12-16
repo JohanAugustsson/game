@@ -3,21 +3,5 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-around;
-}
-
-.container-game .wrapper-game div:nth-child(1){
-  flex: 1;
-  min-width: 200px;
-  background-color: rgb(181, 185, 177);
-}
-.container-game .wrapper-game div:nth-child(2){
-  flex: 4;
-  min-width: 200px;
-  background-color: rgb(222, 57, 228);
-}
-
-.container-game .wrapper-game div:nth-child(3){
-  flex: 1;
-  min-width: 200px;
-  background-color: rgb(57, 126, 228);
+  border: 1px solid black;
 }

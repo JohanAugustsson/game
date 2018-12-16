@@ -37,6 +37,7 @@ function addUserToGameInFirestore(user) {
 
 
 const addGame = (data) => async (dispatch) => {
+    console.log('spara data', data);
     return addGameInFirestore(data)
         .then((game) => {
             dispatch(setGame(data));
@@ -48,7 +49,7 @@ const addGame = (data) => async (dispatch) => {
 function addGameInFirestore(game) {
     game.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     const docRef = firebase.firestore().collection('games').doc();
-    game.id = docRef.uid;
+    game.id = docRef.id;
     return docRef.set(game);
 }
 
