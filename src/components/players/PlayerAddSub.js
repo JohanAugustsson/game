@@ -21,7 +21,7 @@ function PlayerAddSub({player: {firstName, uid, value}, onAdd, onSubstract}) {
 PlayerAddSub.propTypes = {
     player: PropTypes.shape({
         uid: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
         value: PropTypes.number,
     }),
     onAdd: PropTypes.func,

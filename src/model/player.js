@@ -1,14 +1,14 @@
 export class Player {
 
     uid = null;
-    name = null;
+    firstName = null;
     value = null;
     gameId = null;
     team = null;
 
-    constructor(uid, name, value, gameId, team) {
+    constructor(uid, firstName, value, gameId, team) {
         this.uid = uid;
-        this.name = name;
+        this.firstName = firstName;
         this.value = value;
         this.gameId = gameId;
         this.team = team;
