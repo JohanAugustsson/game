@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import "./Game.css";
-import {addGame, addUserToGame, setGame} from '../../store/actions/gameActions'
+import {addGame, addUserToGame, selectGame} from '../../store/actions/gameActions'
 
 import Button from '../../atoms/buttons/buttons';
 
@@ -34,7 +34,7 @@ class GameView extends Component {
 
 
         return Object.values(users).map(user => (
-            <li>
+            <li key={ user.uid }>
                 {user.firstName}
                 <Button variant={'btn-add'} onClick={() => this.addUserToGame({
                     uid: user.uid,
@@ -55,12 +55,13 @@ class GameView extends Component {
         if (!games) return null;
 
         return Object.values(games).map(game => (
-            <li>
+            <li key={game.id}>
                 {game.title}
-                <Button variant={'btn-add'} onClick={() => dispatch(setGame(game))}> Select </Button>
+                <Button variant={'btn-add'} onClick={() => dispatch(selectGame(game))}> Select </Button>
             </li>
         ));
     };
+
 
 
     addUserToGame = (data) => {

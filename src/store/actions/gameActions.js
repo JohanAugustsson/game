@@ -143,4 +143,47 @@ const getActivityList = (game) => {
         });
 };
 
-export {addUserToGame, addGame, getGamesFromDatabase, getGameFromDatabase, setGame};
+
+let unsubscribe = false;
+const selectGame = (game) => async (dispatch) => {
+
+  // tar bort eventuellt tidigare lyssnare innann vi fortsätter
+  if (unsubscribe){
+    unsubscribe();
+  }
+
+  // lägger till nuvarande gane som pågående
+  dispatch(setGame(game));
+
+  // lägger till lyssnare i firestore databas.
+  // Den fångar även upp alla tidigare händelser och returnerar detta
+  // när man lägger till en händelse kommer den att dyka upp 2ggr för närvarnde..
+  // beror på att serverTimestamp sätts efter att dokumentet skapats i databasen.
+  return unsubscribe = firebase.firestore()
+  .collection("gameActivity")
+  .where("gameId", "==", game.id)
+  .onSnapshot(function(snapshot) {
+      snapshot.docChanges().forEach(function(change) {
+          console.log('nu har något hänt');
+          if (change.type === "added") {
+              console.log("New log added: ", change.doc.data());
+          }
+          if (change.type === "modified") {
+              console.log("log modified: ", change.doc.data());
+          }
+          if (change.type === "removed") {
+              console.log("log removed: ", change.doc.data());
+          }
+      });
+  });
+}
+
+const removeListener = () => async (dispatch) => {
+  console.log('ta bort listener');
+  if (unsubscribe){
+    return unsubscribe();
+  }
+  return null;
+}
+
+export {addUserToGame, addGame, getGamesFromDatabase, getGameFromDatabase, setGame, selectGame, removeListener};

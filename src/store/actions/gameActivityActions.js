@@ -14,17 +14,17 @@ const addGameActivities = (payload) => ({
 });
 
 const addScoreActivityToGame = (data) => async (dispatch) => {
-    let gameActivity = {};
-    gameActivity.type = "SCORE";
-    gameActivity.gameId = data.player.gameId;
-    gameActivity.value = data.value;
-    gameActivity.userId = data.player.uid;
-    gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    // let gameActivity = {};
+    // gameActivity.type = "SCORE";
+    // gameActivity.gameId = data.player.gameId;
+    // gameActivity.value = data.value;
+    // gameActivity.userId = data.player.uid;
+    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
     const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
-    gameActivity.id = docRef.id;
-    docRef.set(gameActivity).then(() => {
-        dispatch(addScoreActivity(gameActivity));
+    data.id = docRef.id;
+    docRef.set(data).then(() => {
+        dispatch(addScoreActivity(data));
     }).catch((error) => {
         console.log('något gick fel:', error);
     });

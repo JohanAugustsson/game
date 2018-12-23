@@ -3,7 +3,8 @@ import {connect} from 'react-redux'
 import "./Game.css";
 import {createNewUser} from '../../store/actions/authAction'
 import {getUsersFromDatabase} from '../../store/actions/userActions'
-import {getGamesFromDatabase} from '../../store/actions/gameActions'
+import {getGamesFromDatabase, removeListener} from '../../store/actions/gameActions'
+import {addScoreActivityToGame} from '../../store/actions/gameActivityActions'
 import Button from '../../atoms/buttons/buttons';
 import GameView from './GameView';
 import PlayerAddSub from "../../components/players/PlayerAddSub";
@@ -59,16 +60,36 @@ class Game extends Component {
         return {home, away};
     };
 
+
     createPlayer = (member) => {
       console.log(member);
-      return (     <li><PlayerAddSub player={member} onSubstract={() => console.log("sub")} onAdd={() => console.log("add")}/></li>)
+      return (
+        <li key={member.uid}>
+          <PlayerAddSub
+            player={member}
+            onSubstract={() => this.addScoreToGame(member, 1)}
+            onAdd={() => this.addScoreToGame(member, -1)}
+          />
+        </li>
+      )
 
     };
+
+    addScoreToGame = (member, value) => {
+        const {currentGame, dispatch } = this.props;
+        const obj = {
+          type: 'SCORE',
+          gameId: currentGame.id,
+          value,
+          userId: member.uid,
+        }
+        dispatch(addScoreActivityToGame(obj))
+    }
 
 
     render() {
         const {email, password, firstName, lastName} = this.state;
-        const {currentGame} = this.props;
+        const {dispatch, currentGame} = this.props;
 
         const teamList = (currentGame && currentGame.members) ? this.renderPlayerList() : {
             home: null,
@@ -98,6 +119,7 @@ class Game extends Component {
                 <GameView/>
 
                 <Button variant={'btn-add'} onClick={this.createUser}> + </Button>
+                <button onClick={()=> dispatch(removeListener())}>ta bort listener manuellt</button>
             </div>
         )
     }
