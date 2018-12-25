@@ -5,6 +5,7 @@ import UsersReducer from './UsersReducer'
 import GameReducer from './GameReducer'
 import AllGamesReducer from './AllGamesReducer'
 import GameActivityReducer from "./GameActivityReducer";
+import GamePlayerReducer from "./GamePlayerReducer";
 
 const RootReducer = combineReducers({
     cart: CartReducer,
@@ -12,7 +13,8 @@ const RootReducer = combineReducers({
     users: UsersReducer,
     currentGame: GameReducer,
     games: AllGamesReducer,
-    gameActivities: GameActivityReducer
+    gameActivities: GameActivityReducer,
+    gamePlayer: GamePlayerReducer
 });
 
 export default RootReducer;

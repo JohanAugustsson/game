@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import {ADD_USER_TO_GAME, REMOVE_USER_FROM_GAME, ADD_GAME} from '../reducers/GameReducer';
+import {ADD_GAME, ADD_USER_TO_GAME, REMOVE_USER_FROM_GAME} from '../reducers/GameReducer';
 import {SET_ALL_GAMES} from '../reducers/AllGamesReducer';
 
 
@@ -58,14 +58,15 @@ const getGamesFromDatabase = (data) => async (dispatch) => {
     return getGamesFromFirestore().then((games) => {
 
         const promises = [];
-        Object.values(games).forEach(game => {
-            promises.push(getMemberList(game));
-        });
+        /*       Object.values(games).forEach(game => {
+                   promises.push(getMemberList(game));
+               });
 
-        return Promise.all(promises);
-    }).then((populatedGames) => {
+               return Promise.all(promises)*/
+        ;
+        //}).then(() => {
 
-        dispatch(setAllGames(populatedGames));
+        dispatch(setAllGames(games));
     });
 };
 
@@ -76,7 +77,7 @@ function getGamesFromFirestore(user) {
         .then(function (querySnapshot) {
             const games = {};
             querySnapshot.forEach(function (doc) {
-                games[doc.uid] = doc.data();
+                games[doc.id] = doc.data();
             });
             return games;
         });
@@ -147,43 +148,43 @@ const getActivityList = (game) => {
 let unsubscribe = false;
 const selectGame = (game) => async (dispatch) => {
 
-  // tar bort eventuellt tidigare lyssnare innann vi fortsätter
-  if (unsubscribe){
-    unsubscribe();
-  }
+    // tar bort eventuellt tidigare lyssnare innann vi fortsätter
+    if (unsubscribe) {
+        unsubscribe();
+    }
 
-  // lägger till nuvarande gane som pågående
-  dispatch(setGame(game));
+    // lägger till nuvarande gane som pågående
+    dispatch(setGame(game));
 
-  // lägger till lyssnare i firestore databas.
-  // Den fångar även upp alla tidigare händelser och returnerar detta
-  // när man lägger till en händelse kommer den att dyka upp 2ggr för närvarnde..
-  // beror på att serverTimestamp sätts efter att dokumentet skapats i databasen.
-  return unsubscribe = firebase.firestore()
-  .collection("gameActivity")
-  .where("gameId", "==", game.id)
-  .onSnapshot(function(snapshot) {
-      snapshot.docChanges().forEach(function(change) {
-          console.log('nu har något hänt');
-          if (change.type === "added") {
-              console.log("New log added: ", change.doc.data());
-          }
-          if (change.type === "modified") {
-              console.log("log modified: ", change.doc.data());
-          }
-          if (change.type === "removed") {
-              console.log("log removed: ", change.doc.data());
-          }
-      });
-  });
+    // lägger till lyssnare i firestore databas.
+    // Den fångar även upp alla tidigare händelser och returnerar detta
+    // när man lägger till en händelse kommer den att dyka upp 2ggr för närvarnde..
+    // beror på att serverTimestamp sätts efter att dokumentet skapats i databasen.
+    return unsubscribe = firebase.firestore()
+        .collection("gameActivity")
+        .where("gameId", "==", game.id)
+        .onSnapshot(function (snapshot) {
+            snapshot.docChanges().forEach(function (change) {
+                console.log('nu har något hänt');
+                if (change.type === "added") {
+                    console.log("New log added: ", change.doc.data());
+                }
+                if (change.type === "modified") {
+                    console.log("log modified: ", change.doc.data());
+                }
+                if (change.type === "removed") {
+                    console.log("log removed: ", change.doc.data());
+                }
+            });
+        });
 }
 
 const removeListener = () => async (dispatch) => {
-  console.log('ta bort listener');
-  if (unsubscribe){
-    return unsubscribe();
-  }
-  return null;
+    console.log('ta bort listener');
+    if (unsubscribe) {
+        return unsubscribe();
+    }
+    return null;
 }
 
 export {addUserToGame, addGame, getGamesFromDatabase, getGameFromDatabase, setGame, selectGame, removeListener};

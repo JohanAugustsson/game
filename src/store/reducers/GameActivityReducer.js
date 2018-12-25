@@ -14,7 +14,7 @@ const GameActivityReducer = (state = initialState, {type, payload}) => {
             return {...state, data: payload, isFetched: true}
         }
         case GAME_ACTIVITY_ADD_SCORE: {
-            return {...state, data: {...state.data, [payload.uid]: payload}}
+            return {...state, data: {...state.data, [payload.id]: payload}}
         }
         case CLEAR: {
             return initialState

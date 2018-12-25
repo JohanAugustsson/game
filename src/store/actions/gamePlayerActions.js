@@ -1,73 +1,64 @@
 import firebase from "firebase";
-import {GAME_ACTIVITY_ADD_ALL, GAME_ACTIVITY_ADD_SCORE} from "../reducers/GameActivityReducer";
+import {GAMEPLAYER_ADD_PLAYER, GAMEPLAYER_ADD_PLAYERS} from "../reducers/GamePlayerReducer";
 
-const COLLECTION_NAME = "gameActivity";
+const COLLECTION_NAME = "gameMembers";
 
-const addScoreActivity = (payload) => ({
-    type: GAME_ACTIVITY_ADD_SCORE,
+const addPlayers = (payload) => ({
+    type: GAMEPLAYER_ADD_PLAYERS,
     payload
 });
 
-const addGameActivities = (payload) => ({
-    type: GAME_ACTIVITY_ADD_ALL,
+const addPlayer = (payload) => ({
+    type: GAMEPLAYER_ADD_PLAYER,
     payload
 });
 
-const addScoreActivityToGame = (data) => async (dispatch) => {
-    let gameActivity = {};
-    gameActivity.type = "SCORE";
-    gameActivity.gameId = data.player.gameId;
-    gameActivity.value = data.value;
-    gameActivity.userId = data.player.uid;
-    gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+const addPlayerToGame = (user) => async (dispatch) => {
+    user.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    firebase.firestore()
+        .collection('gameMembers')
+        .doc()
+        .set(user)
+        .then((users) => {
+            dispatch(addPlayer(users));
+        });
+};
 
-    const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
-    gameActivity.id = docRef.id;
-    docRef.set(gameActivity).then(() => {
-        dispatch(addScoreActivity(gameActivity));
-    }).catch((error) => {
-        console.log('något gick fel:', error);
+const getGamePlayersFromDB = (gameId) => async (dispatch) => {
+    return getGamePlayersFromFirestore(gameId).then((actions) => {
+        dispatch((addPlayers(actions)));
     });
 };
 
-const getGameActivitiesByGameId = (gameId) => async (dispatch) => {
-    return getGameActivitiesFromFirestore(gameId).then((actions) => {
-        dispatch((addGameActivities(actions)));
-    });
-};
-
-function getGameActivitiesFromFirestore(gameId) {
+function getGamePlayersFromFirestore(gameId) {
     return firebase.firestore()
         .collection(COLLECTION_NAME)
         .where('gameId', '==', gameId)
         .get()
         .then(function (querySnapshot) {
-            const gameActivities = {};
+            const players = {};
             querySnapshot.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
-                gameActivities[doc.id] = doc.data();
+                players[doc.id] = doc.data();
             });
-            return gameActivities;
+            return players;
         });
 }
 
 let unsubscribe = false;
-const listenAtActivity = (gameId) => async (dispatch) => {
+const listenAtGamePlayer = (game) => async (dispatch) => {
 
     // tar bort eventuellt tidigare lyssnare innann vi fortsätter
     if (unsubscribe) {
         unsubscribe();
     }
 
-    // Todo: Dispatcha listeners to store för att se vilka lyssnare som e aktiva?
-    dispatch({type: "none"});
-
     // Den fångar även upp alla tidigare händelser och returnerar detta
     // när man lägger till en händelse kommer den att dyka upp 2ggr för närvarnde..
     // beror på att serverTimestamp sätts efter att dokumentet skapats i databasen.
     return unsubscribe = firebase.firestore()
         .collection(COLLECTION_NAME)
-        .where("gameId", "==", gameId)
+        .where("gameId", "==", game.id)
         .onSnapshot(function (snapshot) {
             snapshot.docChanges().forEach(function (change) {
                 console.log('nu har något hänt');
@@ -92,4 +83,4 @@ const removeListener = () => async () => {
     return null;
 };
 
-export {addScoreActivity, addGameActivities, addScoreActivityToGame, getGameActivitiesByGameId, listenAtActivity};
+export {getGamePlayersFromDB, addPlayer, addPlayers, listenAtGamePlayer};
