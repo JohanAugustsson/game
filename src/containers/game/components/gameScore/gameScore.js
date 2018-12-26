@@ -6,11 +6,26 @@ import {
     listenAtActivity,
     removeActivityListener
 } from "../../../../store/actions/gameActivityActions";
-import PlayerAddSub from "../../../../components/players/PlayerAddSub";
 import {Player} from "../../../../model/player";
 import {getUsersFromDatabase} from "../../../../store/actions/userActions";
 import {getGameFromDatabase, getGamesFromDatabase} from "../../../../store/actions/gameActions";
 import {getGamePlayersFromDB} from "../../../../store/actions/gamePlayerActions";
+import List from '@material-ui/core/List';
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
+import PersonIcon from "@material-ui/icons/Person";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import ListSubheader from "@material-ui/core/es/ListSubheader/ListSubheader";
+import Divider from "@material-ui/core/es/Divider/Divider";
+
 
 class GameScore extends Component {
     constructor(props) {
@@ -74,7 +89,6 @@ class GameScore extends Component {
         dispatch(addScoreActivityToGame({player, value: 1}))
     }
 
-
     onSub(player) {
         const {dispatch} = this.props;
         dispatch(addScoreActivityToGame({player, value: -1}))
@@ -83,28 +97,88 @@ class GameScore extends Component {
     render() {
         let plays = this.renderPlayer();
         return (
-            <div className={'row'}>
-                test
-                <div className={'column'}>
-                    {this.getScore(plays.filter(player => player.isHome()))}
-                    <div>
-                        {plays.filter(player => player.isHome()).map((player, i) =>
-                            <ul key={i}>
-                                <PlayerAddSub key={i} player={player} onAdd={() => this.onAdd(player)}
-                                              onSubstract={() => this.onSub(player)}/>
-                            </ul>)}
-                    </div>
-                </div>
-                <div className={'column'}>
-                    {this.getScore(plays.filter(player => !player.isHome()))}
-                    <div>
-                        {plays.filter(player => !player.isHome()).map((player, i) =>
-                            <ul key={i}>
-                                <PlayerAddSub player={player} onAdd={() => this.onAdd(player)}
-                                              onSubstract={() => this.onSub(player)}/>
-                            </ul>)}
-                    </div>
-                </div>
+            <div className={"root"}>
+                <Paper className={"paper"}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography color="textSecondary">Game ID: 1030114</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm container justify="space-around" alignItems="center">
+                            <Grid item>
+                                <Typography color="textSecondary">Home</Typography>
+                                <Typography variant="subtitle1">
+                                    {this.getScore(plays.filter(player => player.isHome()))}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography color="textSecondary">Away</Typography>
+                                <Typography variant="subtitle1">
+                                    {this.getScore(plays.filter(player => !player.isHome()))}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Paper>
+                <Grid container>
+                    <Grid item xs={12} sm={6}>
+                        <Paper className={"paper"}>
+                            <List>
+                                <ListSubheader>Home</ListSubheader>
+                                {plays.filter(player => player.isHome()).map((player, i) =>
+                                    <div key={i}>
+                                        <Divider/>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <PersonIcon/>
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={player.firstName}/>
+                                            <ListItemSecondaryAction>
+                                                <IconButton aria-label="Delete" onClick={() => this.onSub(player)}>
+                                                    <RemoveIcon/>
+                                                </IconButton>
+                                                {player.value}
+                                                <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
+                                                    <AddIcon/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </div>
+                                )}
+                            </List>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Paper className={"paper"}>
+                            <List>
+                                <ListSubheader>Away</ListSubheader>
+                                {plays.filter(player => !player.isHome()).map((player, i) =>
+                                    <div key={i}>
+                                        <Divider/>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <PersonIcon/>
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={player.firstName}/>
+                                            <ListItemSecondaryAction>
+                                                <IconButton aria-label="Delete" onClick={() => this.onSub(player)}>
+                                                    <RemoveIcon/>
+                                                </IconButton>
+                                                {player.value}
+                                                <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
+                                                    <AddIcon/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </div>
+                                )}
+                            </List>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
