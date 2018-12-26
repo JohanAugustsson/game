@@ -17,10 +17,10 @@ class GameScore extends Component {
         super(props);
 
         this.state = {
-            currentGameId: this.props.match.params.id
+            gameId: this.props.match.params.id
         };
 
-        const {userIsFetched, gamesIsFetched, gamePlayerIsFetched, activitieIsFetched, currentGameIsFetched, dispatch} = props;
+        const {userIsFetched, gamesIsFetched, gamePlayerIsFetched, activitieIsFetched, gameIsFetched, dispatch} = props;
         if (!userIsFetched) {
             dispatch(getUsersFromDatabase());
         }
@@ -28,25 +28,25 @@ class GameScore extends Component {
             dispatch(getGamesFromDatabase());
         }
 
-        if (!currentGameIsFetched) {
-            dispatch(getGameFromDatabase(this.state.currentGameId))
+        if (!gameIsFetched) {
+            dispatch(getGameFromDatabase(this.state.gameId))
         }
 
         if (!gamePlayerIsFetched) {
-            dispatch(getGamePlayersFromDB(this.state.currentGameId));
+            dispatch(getGamePlayersFromDB(this.state.gameId));
         }
 
         if (!activitieIsFetched) {
-            dispatch(getGameActivitiesByGameId(this.state.currentGameId));
+            dispatch(getGameActivitiesByGameId(this.state.gameId));
         }
-        if (this.state.currentGameId) {
-            dispatch(listenAtActivity(this.state.currentGameId));
+        if (this.state.gameId) {
+            dispatch(listenAtActivity(this.state.gameId));
         }
     }
 
     renderPlayer() {
-        const {activities, currentGame, gamePlayer, users} = this.props;
-        if (gamePlayer && currentGame && activities) {
+        const {activities, game, gamePlayer, users} = this.props;
+        if (gamePlayer && game && activities) {
             return Object.keys(gamePlayer).map(member => {
                 let usr = gamePlayer[member];
                 let val = 0;
@@ -115,8 +115,8 @@ const mapStateToProps = (state) => ({
     usersIsFetched: state.users.isFetched,
     games: state.games.data,
     gamesIsFetched: state.games.data.isFetched,
-    currentGame: state.currentGame.data,
-    currentGameIsFetched: state.currentGame.isFetched,
+    game: state.game.data,
+    gameIsFetched: state.game.isFetched,
     activities: state.gameActivities.data,
     activitieIsFetched: state.gameActivities.isFetched,
     gamePlayer: state.gamePlayer.data,
