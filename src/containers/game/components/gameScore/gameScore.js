@@ -3,8 +3,8 @@ import "./gameScore.css";
 import connect from "react-redux/es/connect/connect";
 import {
     addScoreActivityToGame,
-    getGameActivitiesByGameId,
-    listenAtActivity
+    listenAtActivity,
+    removeActivityListener
 } from "../../../../store/actions/gameActivityActions";
 import PlayerAddSub from "../../../../components/players/PlayerAddSub";
 import {Player} from "../../../../model/player";
@@ -19,8 +19,10 @@ class GameScore extends Component {
         this.state = {
             gameId: this.props.match.params.id
         };
+    }
 
-        const {userIsFetched, gamesIsFetched, gamePlayerIsFetched, activitieIsFetched, gameIsFetched, dispatch} = props;
+    componentWillMount() {
+        const {userIsFetched, gamesIsFetched, gamePlayerIsFetched, gameIsFetched, dispatch} = this.props;
         if (!userIsFetched) {
             dispatch(getUsersFromDatabase());
         }
@@ -35,14 +37,12 @@ class GameScore extends Component {
         if (!gamePlayerIsFetched) {
             dispatch(getGamePlayersFromDB(this.state.gameId));
         }
-
-        if (!activitieIsFetched) {
-            dispatch(getGameActivitiesByGameId(this.state.gameId));
-        }
-        if (this.state.gameId) {
-            dispatch(listenAtActivity(this.state.gameId));
-        }
+        dispatch(listenAtActivity(this.state.gameId));
     }
+
+    componentWillUnmount() {
+        removeActivityListener();
+    };
 
     renderPlayer() {
         const {activities, game, gamePlayer, users} = this.props;
@@ -118,7 +118,6 @@ const mapStateToProps = (state) => ({
     game: state.game.data,
     gameIsFetched: state.game.isFetched,
     activities: state.gameActivities.data,
-    activitieIsFetched: state.gameActivities.isFetched,
     gamePlayer: state.gamePlayer.data,
     gamePlayerIsFetched: state.gamePlayer.isFetched,
 });

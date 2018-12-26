@@ -13,18 +13,18 @@ const addGameActivities = (payload) => ({
     payload
 });
 
-const addScoreActivityToGame = (data) => async (dispatch) => {
+const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
     let gameActivity = {};
     gameActivity.type = "SCORE";
-    gameActivity.gameId = data.player.gameId;
-    gameActivity.value = data.value;
-    gameActivity.userId = data.player.uid;
+    gameActivity.gameId = player.gameId;
+    gameActivity.value = value;
+    gameActivity.userId = player.uid;
     gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
     const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
     gameActivity.id = docRef.id;
     docRef.set(gameActivity).then(() => {
-        dispatch(addScoreActivity(gameActivity));
+        dispatch({type: "none"});
     }).catch((error) => {
         console.log('något gick fel:', error);
     });
@@ -54,37 +54,24 @@ function getGameActivitiesFromFirestore(gameId) {
 let unsubscribe = false;
 const listenAtActivity = (gameId) => async (dispatch) => {
 
-    // tar bort eventuellt tidigare lyssnare innann vi fortsätter
     if (unsubscribe) {
         unsubscribe();
     }
-
-    // Todo: Dispatcha listeners to store för att se vilka lyssnare som e aktiva?
-    dispatch({type: "none"});
-
-    // Den fångar även upp alla tidigare händelser och returnerar detta
-    // när man lägger till en händelse kommer den att dyka upp 2ggr för närvarnde..
-    // beror på att serverTimestamp sätts efter att dokumentet skapats i databasen.
     return unsubscribe = firebase.firestore()
         .collection(COLLECTION_NAME)
         .where("gameId", "==", gameId)
         .onSnapshot(function (snapshot) {
             snapshot.docChanges().forEach(function (change) {
-                console.log('nu har något hänt');
+                let changedActivity = change.doc.data();
+
                 if (change.type === "added") {
-                    console.log("New log added: ", change.doc.data());
-                }
-                if (change.type === "modified") {
-                    console.log("log modified: ", change.doc.data());
-                }
-                if (change.type === "removed") {
-                    console.log("log removed: ", change.doc.data());
+                    dispatch(addScoreActivity(changedActivity));
                 }
             });
         });
 };
 
-const removeListener = () => async () => {
+const removeActivityListener = () => {
     console.log('ta bort listener för: ' + COLLECTION_NAME);
     if (unsubscribe) {
         return unsubscribe();
@@ -92,4 +79,11 @@ const removeListener = () => async () => {
     return null;
 };
 
-export {addScoreActivity, addGameActivities, addScoreActivityToGame, getGameActivitiesByGameId, listenAtActivity};
+export {
+    addScoreActivity,
+    addGameActivities,
+    addScoreActivityToGame,
+    getGameActivitiesByGameId,
+    listenAtActivity,
+    removeActivityListener
+};
