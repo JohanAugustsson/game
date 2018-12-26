@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import Button from '../../../atoms/buttons/buttons';
+// import Button from '../../../atoms/buttons/buttons';
+import Button from '@material-ui/core/Button';
 import { createNewGame } from '../../../store/actions/gameActions'
 // import "./Game.css";
 
@@ -39,7 +40,7 @@ class CreateGame extends Component {
         return (
             <div className={'container-game'}>
                 skapa ett game
-
+                <Button>test</Button>
             </div>
         )
     }
