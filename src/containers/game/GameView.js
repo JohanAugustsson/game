@@ -28,8 +28,8 @@ class GameView extends Component {
 
     createUserList = () => {
         const users = this.props.users.data;
-        const {currentGame} = this.props;
-        const gameId = currentGame.data.id;
+        const {game} = this.props;
+        const gameId = game.data.id;
         if (!users) return null;
 
 
@@ -97,10 +97,10 @@ class GameView extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    users: state.users,
-    games: state.games,
-    currentGame: state.currentGame,
+const mapStateToProps = (store) => ({
+    users: store.users,
+    games: store.games,
+    game: store.game,
 });
 
 export default connect(mapStateToProps)(GameView)

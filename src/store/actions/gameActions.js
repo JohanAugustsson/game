@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import {ADD_GAME, ADD_USER_TO_GAME, REMOVE_USER_FROM_GAME} from '../reducers/GameReducer';
+import {SELECT_GAME, ADD_USER_TO_GAME, REMOVE_USER_FROM_GAME} from '../reducers/GameReducer';
 import {SET_ALL_GAMES} from '../reducers/AllGamesReducer';
 
 
@@ -14,7 +14,7 @@ const removeUser = (payload) => ({
 });
 
 const setGame = (payload) => ({
-    type: ADD_GAME,
+    type: SELECT_GAME,
     payload
 });
 

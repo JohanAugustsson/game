@@ -89,13 +89,13 @@ class Game extends Component {
 
     render() {
         const {email, password, firstName, lastName} = this.state;
-        const {dispatch, currentGame} = this.props;
+        const {dispatch, game} = this.props;
 
-        const teamList = (currentGame && currentGame.members) ? this.renderPlayerList() : {
+        const teamList = (game && game.members) ? this.renderPlayerList() : {
             home: null,
             away: null
         };
-        const title = currentGame.title || 'Inget spel valt'
+        const title = (game.title )|| 'Inget spel valt'
 
         return (
             <div className={'container-game'}>
@@ -131,7 +131,7 @@ const mapStateToProps = (store) => ({
     usersIsFetched: store.users.isFetched,
     games: store.games.data,
     gameIsFetched: store.games.isFetched,
-    currentGame: store.currentGame.data,
+    game: store.game.data,
 });
 
 export default connect(mapStateToProps)(Game)
