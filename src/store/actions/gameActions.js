@@ -36,7 +36,7 @@ function addUserToGameInFirestore(user) {
 }
 
 
-const addGame = (data) => async (dispatch) => {
+const createNewGame = (data) => async (dispatch) => {
     console.log('spara data', data);
     return addGameInFirestore(data)
         .then((game) => {
@@ -187,4 +187,4 @@ const removeListener = () => async (dispatch) => {
     return null;
 }
 
-export {addUserToGame, addGame, getGamesFromDatabase, getGameFromDatabase, setGame, selectGame, removeListener};
+export {addUserToGame, createNewGame, getGamesFromDatabase, getGameFromDatabase, setGame, selectGame, removeListener};
