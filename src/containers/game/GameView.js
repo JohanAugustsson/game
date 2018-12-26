@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import "./Game.css";
-import {addGame, addUserToGame, selectGame} from '../../store/actions/gameActions'
+import { selectGame } from '../../store/actions/gameActions'
+import {getGamesFromDatabase} from '../../store/actions/gameActions'
+import {getUsersFromDatabase} from '../../store/actions/userActions'
 
 import Button from '../../atoms/buttons/buttons';
 
@@ -13,10 +15,13 @@ class GameView extends Component {
             gameName: '',
         }
 
-        // const { game, dispatch } = props;
-        // if ( !game.isFetched ){
-        //   dispatch(getUsersFromDatabase());
-        // }
+        const { games, userIsFetched, dispatch } = props;
+        if ( !games.isFetched ){
+          dispatch(getGamesFromDatabase());
+        }
+        if (!userIsFetched) {
+            dispatch(getUsersFromDatabase());
+        }
     }
 
     updateInput = (e, stateKey) => {
@@ -26,29 +31,6 @@ class GameView extends Component {
     createUser = () => {
     };
 
-    createUserList = () => {
-        const users = this.props.users.data;
-        const {game} = this.props;
-        const gameId = game.data.id;
-        if (!users) return null;
-
-
-        return Object.values(users).map(user => (
-            <li key={ user.uid }>
-                {user.firstName}
-                <Button variant={'btn-add'} onClick={() => this.addUserToGame({
-                    uid: user.uid,
-                    gameId: gameId,
-                    team: 'Home'
-                })}> Hemma </Button>
-                <Button variant={'btn-add'} onClick={() => this.addUserToGame({
-                    uid: user.uid,
-                    gameId: gameId,
-                    team: 'Away'
-                })}> Borta </Button>
-            </li>
-        ));
-    };
     createGameList = () => {
         const games = this.props.games.data;
         const {dispatch} = this.props;
@@ -63,35 +45,14 @@ class GameView extends Component {
     };
 
 
-
-    addUserToGame = (data) => {
-        const {dispatch} = this.props;
-        console.log('användare data', data);
-        dispatch(addUserToGame(data))
-    };
-
-    createGame = () => {
-        const {dispatch} = this.props;
-        console.log('skapar game');
-        dispatch(addGame({title: 'first Game'}));
-    };
-
     render() {
-        const {email, password, firstName, lastName} = this.state;
-        const userList = this.createUserList();
         const gameList = this.createGameList();
-
-
         return (
             <div className={'container-game'}>
-                <ul>
-                    {userList}
-                </ul>
+                Välj game
                 <ul>
                     {gameList}
                 </ul>
-
-                <Button variant={'primary'} onClick={this.createGame}> Skapa game </Button>
             </div>
         )
     }
@@ -101,6 +62,7 @@ const mapStateToProps = (store) => ({
     users: store.users,
     games: store.games,
     game: store.game,
+    userIsFetched: store.users.isFetched
 });
 
 export default connect(mapStateToProps)(GameView)
