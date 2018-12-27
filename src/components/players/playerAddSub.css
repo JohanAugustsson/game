@@ -1,9 +1,4 @@
-
-.game-form {
+.playeraddsub-gridcenter {
     display: flex;
-    align-items: center;
-}
-
-.game-form .margin {
-    margin: 10px;
+    justify-content: center;
 }

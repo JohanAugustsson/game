@@ -61,13 +61,15 @@ const listenAtActivity = (gameId) => async (dispatch) => {
         .collection(COLLECTION_NAME)
         .where("gameId", "==", gameId)
         .onSnapshot(function (snapshot) {
+            let addedActivities = {};
             snapshot.docChanges().forEach(function (change) {
                 let changedActivity = change.doc.data();
 
                 if (change.type === "added") {
-                    dispatch(addScoreActivity(changedActivity));
+                    addedActivities = Object.assign({}, addedActivities, {[changedActivity.id]: changedActivity});
                 }
             });
+            dispatch(addGameActivities(addedActivities));
         });
 };
 
