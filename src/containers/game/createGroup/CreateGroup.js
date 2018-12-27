@@ -19,7 +19,7 @@ class CreateGroup extends Component {
             formField: {
               name: '',
               password: '',
-              members: [],
+              players: [],
             },
             error: {
               name: 'this is error'
@@ -73,8 +73,8 @@ class CreateGroup extends Component {
                   />
                   <CheckboxListSecondary
                     data={users.data}
-                    formkey='members'
-                    value={formField.members}
+                    formkey='players'
+                    value={formField.players}
                     onChange={this.handleChange}
                   />
                   <Button onClick={this.handleCreateGroup}>Skapa Grupp</Button>

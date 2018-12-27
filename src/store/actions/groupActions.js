@@ -15,24 +15,34 @@ const addNewgroup = (payload) => ({
 
 
 const createGroup = (group) => async (dispatch) => {
+    const docRef = firebase.firestore().collection('groups').doc();
+    group.Id = docRef.id;
     group.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    await addGroupPlayers(group);
 
-    return firebase.firestore()
-        .collection('groups')
-        .doc()
-        .set(group)
+    delete group.players;
+    return docRef.set(group)
         .then((group) => {
+            console.log(group);
             return dispatch(addNewgroup(group));
         });
 };
-// 
-// const addGroupMembers = (group) => {
-//     promises = [];
-//     group.members.forEach(uid=>{
-//       promises.push(createMember(uid, group.createdAt))
-//     })
-//     return promises;
-// }
+
+const addGroupPlayers = (group) => {
+    const promises = [];
+    const { createdAt, Id } = group;
+    group.players.forEach(uid=>{
+      promises.push(createPlayer({ userUid: uid, createdAt, groupId: Id }))
+    })
+    return Promise.all(promises);
+}
+
+const createPlayer = (player) => {
+  return firebase.firestore()
+    .collection('groupPlayers')
+    .doc()
+    .set(player);
+}
 
 const getGroups = (userUid) => async (dispatch) => {
     return getGroupsFromDatabase(userUid).then((actions) => {
@@ -42,7 +52,7 @@ const getGroups = (userUid) => async (dispatch) => {
 
 function getGroupsFromDatabase(userUid) {
     return firebase.firestore()
-        .collection('groupMembers')
+        .collection('groupPlayers')
         .where('userUid', '==', userUid)
         .get()
         .then(function (querySnapshot) {

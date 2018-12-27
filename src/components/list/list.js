@@ -45,7 +45,7 @@ class CheckboxListSecondary extends React.Component {
             <ListItemIcon>
               <PermIdentity />
             </ListItemIcon>
-            <ListItemText primary={`${item.firstName} ${item.lastName}`} />
+            <ListItemText primary={`${item.firstName} ${item.lastName} - ${item.email}`} />
             <ListItemSecondaryAction>
               <Checkbox
                 onChange={this.handleToggle(item.uid)}
