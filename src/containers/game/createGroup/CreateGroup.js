@@ -5,8 +5,9 @@ import Input from '../../../atoms/input/Input';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { createNewGame } from '../../../store/actions/gameActions'
+import { createGroup } from '../../../store/actions/groupActions'
 import { getUsersFromDatabase } from '../../../store/actions/userActions'
+import CheckboxListSecondary from '../../../components/list/list'
 // import "./Game.css";
 
 
@@ -18,6 +19,7 @@ class CreateGroup extends Component {
             formField: {
               name: '',
               password: '',
+              members: [],
             },
             error: {
               name: 'this is error'
@@ -41,17 +43,17 @@ class CreateGroup extends Component {
     };
 
 
-    createGame = () => {
+    handleCreateGroup = () => {
         const {dispatch} = this.props;
         const { formField } = this.state;
-        const { title, group, type } = formField;
         console.log('skapar game');
-        dispatch(createNewGame({title: 'first Game'}));
+        dispatch(createGroup( {...formField} ));
     };
 
 
     render() {
         const { formField, error } = this.state;
+        const { users } = this.props;
         return (
             <div className={'container-game'}>
                 <div className={'paper'}>
@@ -69,7 +71,13 @@ class CreateGroup extends Component {
                     onChange={this.handleChange}
                     error={error.title}
                   />
-                  <Button onClick={this.createGame}>Skapa Grupp</Button>
+                  <CheckboxListSecondary
+                    data={users.data}
+                    formkey='members'
+                    value={formField.members}
+                    onChange={this.handleChange}
+                  />
+                  <Button onClick={this.handleCreateGroup}>Skapa Grupp</Button>
                 </div>
             </div>
         )

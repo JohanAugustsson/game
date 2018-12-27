@@ -39,7 +39,7 @@ class CreateGame extends Component {
         formField[key] = e.target.value
         this.setState({formField});
     };
-
+    
 
     createGame = () => {
         const {dispatch} = this.props;

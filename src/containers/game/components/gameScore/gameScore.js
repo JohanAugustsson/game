@@ -129,31 +129,11 @@ class GameScore extends Component {
                                     <div key={i}>
                                         <Divider/>
                                         <ListItem>
-                                            <Grid item xs container direction={"row"}
-                                                  alignItems={"center"} justify={"center"}>
-                                                <Grid item xs={1} sm={2} className={"gridcenter"}>
-                                                    <PersonIcon/>
-                                                </Grid>
-                                                <Grid item xs={8} sm={6}>
-                                                    <span>{player.firstName}</span>
-                                                </Grid>
-                                                <Grid item xs={1} sm={1} className={"gridcenter"}>
-                                                    <IconButton aria-label="Delete"
-                                                                onClick={() => this.onSub(player)}>
-                                                        <RemoveIcon/>
-                                                    </IconButton>
-                                                </Grid>
-                                                <Grid item xs={1} sm={2} className={"gridcenter"}>
-                                                    <Typography variant={"subtitle1"}
-                                                                align={"center"}
-                                                                className={"gridcenter"}> {player.value}</Typography>
-                                                </Grid>
-                                                <Grid item xs={1} sm={1} className={"gridcenter"}>
-                                                    <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
-                                                        <AddIcon/>
-                                                    </IconButton>
-                                                </Grid>
-                                            </Grid>
+                                          <PlayerAddSub
+                                            player={player}
+                                            onAdd= {this.onAdd}
+                                            onSubstract={this.onSubstract}
+                                          />
                                         </ListItem>
                                     </div>
                                 )}
