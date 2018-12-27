@@ -7,7 +7,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import PersonIcon from "@material-ui/icons/Person";
 
 function PlayerAddSub({player, onAdd, onSubstract}) {
     return (
