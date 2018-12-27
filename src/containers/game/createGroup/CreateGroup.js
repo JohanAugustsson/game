@@ -6,31 +6,31 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { createNewGame } from '../../../store/actions/gameActions'
+import { getUsersFromDatabase } from '../../../store/actions/userActions'
 // import "./Game.css";
 
 
 
-class CreateGame extends Component {
+class CreateGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
             formField: {
-              title: '',
-              group: '',
-              type: 'NHL',
+              name: '',
+              password: '',
             },
             error: {
               name: 'this is error'
             },
         }
 
-        // const { game, userIsFetched, dispatch } = props;
+        const { game, userIsFetched, dispatch } = props;
         // if ( !game.isFetched ){
-        //   dispatch(getGamesFromDatabase());
+        //    dispatch(getGamesFromDatabase());
         // }
-        // if (!userIsFetched) {
-        //     dispatch(getUsersFromDatabase());
-        // }
+        if (!userIsFetched) {
+            dispatch(getUsersFromDatabase());
+        }
     }
 
 
@@ -56,27 +56,20 @@ class CreateGame extends Component {
             <div className={'container-game'}>
                 <div className={'paper'}>
                   <Input
-                    label='Title of the game'
-                    formkey='title'
+                    label='Title of the group'
+                    formkey='name'
                     value={formField.title}
                     onChange={this.handleChange}
                     error={error.title}
                   />
                   <Input
-                    label='Grupp'
-                    formkey='group'
-                    value={formField.group}
+                    label='Password'
+                    formkey='password'
+                    value={formField.title}
                     onChange={this.handleChange}
-                    error={error.group}
+                    error={error.title}
                   />
-                  <Input
-                    label='Type of game'
-                    formkey='type'
-                    value={formField.type}
-                    onChange={this.handleChange}
-                    error={error.type}
-                  />
-                  <Button>Skapa GAME</Button>
+                  <Button onClick={this.createGame}>Skapa Grupp</Button>
                 </div>
             </div>
         )
@@ -90,4 +83,4 @@ const mapStateToProps = (store) => ({
     userIsFetched: store.users.isFetched
 });
 
-export default connect(mapStateToProps)(CreateGame)
+export default connect(mapStateToProps)(CreateGroup)

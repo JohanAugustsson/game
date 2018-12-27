@@ -9,12 +9,13 @@ function Input (props) {
       {props.label}
     </label>
       <input
+        {...props}
         value={props.value}
         className={props.variant}
-        onChange={e=>props.onChange(e, props.formKey)}
+        onChange={e=>props.onChange(e, props.formkey)}
       />
     <label className='label-bottom'>
-      {props.errorMsg}
+      {props.error}
     </label>
     </div>
   );

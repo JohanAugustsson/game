@@ -18,18 +18,6 @@ body {
   padding: 32px;
 }
 
-.productList {
-  display : flex;
-  flex: 1;
-  flex-wrap: wrap;
-  flex-direction: row;
-}
-
-.productListItem {
-  padding: 10px 30px;
-  width: 200px;
-}
-
 .paper {
   margin: 10px;
   background-color: #eceae7;

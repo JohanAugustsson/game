@@ -6,8 +6,9 @@ const Navigation = (props) => (
   <nav>
     <ul>
       <li><NavLink to='/'>Skapa användare</NavLink></li>
-      <li><NavLink to='/game'>Game</NavLink></li>
+      <li><NavLink to='/create-group'>Skapa Grupp</NavLink></li>
       <li><NavLink to='/create-game'>Skapa game</NavLink></li>
+      <li><NavLink to='/game'>Game</NavLink></li>
     </ul>
   </nav>
 )
