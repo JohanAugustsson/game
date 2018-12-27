@@ -37,7 +37,7 @@ class CreateGame extends Component {
     handleChange = (e, key) => {
         const { formField } = this.state
         formField[key] = e.target.value
-        this.setState(formField);
+        this.setState({formField});
     };
 
 
