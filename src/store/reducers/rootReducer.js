@@ -6,6 +6,7 @@ import AllGamesReducer from './AllGamesReducer'
 import GameActivityReducer from "./GameActivityReducer";
 import GamePlayerReducer from "./GamePlayerReducer";
 import GroupReducer from "./GamePlayerReducer";
+import SnackbarReducer from "./SnackbarReducer";
 
 const RootReducer = combineReducers({
     auth: AuthReducer,
@@ -15,6 +16,7 @@ const RootReducer = combineReducers({
     gameActivities: GameActivityReducer,
     gamePlayer: GamePlayerReducer,
     groups: GroupReducer,
+    snackbar: SnackbarReducer,
 });
 
 export default RootReducer;

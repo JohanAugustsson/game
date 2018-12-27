@@ -9,6 +9,7 @@ import { createGroup } from '../../../store/actions/groupActions'
 import { getUsersFromDatabase } from '../../../store/actions/userActions'
 import CheckboxListSecondary from '../../../components/list/list'
 // import "./Game.css";
+import SnackBar from '../../../components/snackbar/Snackbar'
 
 
 

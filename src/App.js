@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Router from './Router';
 import { Switch, Route } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import SnackBar from './components/snackbar/Snackbar'
 const Navigation = (props) => (
   <nav>
     <ul>
@@ -19,6 +20,7 @@ class App extends Component {
       <div className="page-container">
         <Navigation />
         <Router />
+        <SnackBar />
       </div>
     )
   };

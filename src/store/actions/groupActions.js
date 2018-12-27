@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import {ADD_GROUP } from "../reducers/GroupReducer";
+import { snackbarMsg, snackbarError } from './SnackbarActions'
 
 const COLLECTION_NAME = "groups";
 
@@ -13,7 +14,7 @@ const addNewgroup = (payload) => ({
 });
 
 
-
+// ------------------ Create group -----------------------------------------
 const createGroup = (group) => async (dispatch) => {
     const docRef = firebase.firestore().collection('groups').doc();
     group.Id = docRef.id;
@@ -25,7 +26,13 @@ const createGroup = (group) => async (dispatch) => {
         .then((group) => {
             console.log(group);
             return dispatch(addNewgroup(group));
+        }).then(()=>{
+            return dispatch(snackbarMsg('Success'));
+        })
+        .catch(()=>{
+          return dispatch(snackbarError('Sorry something went wrong'))
         });
+
 };
 
 const addGroupPlayers = (group) => {
@@ -43,6 +50,8 @@ const createPlayer = (player) => {
     .doc()
     .set(player);
 }
+
+// ---------------------  END --------------------------------
 
 const getGroups = (userUid) => async (dispatch) => {
     return getGroupsFromDatabase(userUid).then((actions) => {
