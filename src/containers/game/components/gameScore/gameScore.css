@@ -6,3 +6,8 @@
     textAlign: 'center';
     margin: 10px
 }
+
+.gridcenter {
+    display: flex;
+    justify-content: center;
+}
