@@ -1,9 +1,6 @@
-import React from 'react';
+import React,{ Fragment} from 'react';
 import './buttons.css';
 
-const buttonStyle = {
-  margin: '10px 10px 10px 0'
-};
 
 function Button (props) {
   if ( props.variant ==='primary') return PrimaryBtn(props);
@@ -14,8 +11,7 @@ function Button (props) {
   const variant = props.variant || 'default'
   return (
     <button
-    className={variant}
-    style={buttonStyle}
+    className={"atoms-button " + variant}
     onClick={props.onClick }>{children}</button>
   );
 }
@@ -27,8 +23,7 @@ function PrimaryBtn(props){
   const variant = props.variant || 'default'
   return (
     <button
-    className={variant}
-    style={buttonStyle}
+    className={"atoms-button " + variant}
     onClick={props.onClick }>{children}</button>
   );
 }
@@ -38,8 +33,7 @@ function BtnAdd(props){
   const variant = props.variant || 'default'
   return (
     <button
-    className={variant}
-    style={buttonStyle}
+    className={"atoms-button " + variant}
     onClick={props.onClick }>{children}</button>
   );
 }

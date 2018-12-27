@@ -1,0 +1,30 @@
+.atoms-input {
+  display: inline-flex;
+  position: relative;
+  padding: 10px;
+  width: 100%;
+  margin: 3px;
+}
+
+.atoms-input label {
+  position: absolute;
+  font-size: 0.9rem;
+}
+.atoms-input .label-header {
+  top: -5px;
+  left: 20px;
+}
+.atoms-input .label-bottom {
+  bottom: -2px;
+  left: 20px;
+  color: red;
+}
+.atoms-input input{
+  padding: 7px;
+  border-radius: 5px;
+  height: 50px;
+  width: 100%;
+  font-size: 1.1rem;
+  margin: 5px;
+  border: none;
+}

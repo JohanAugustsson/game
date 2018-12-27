@@ -1,10 +1,14 @@
-.primary {
-  background-color: rgb(83, 224, 148);
-  padding: 5px;
-  border-radius: 2px;
+.atoms-button{
+  width: 150px;
+  height: 50px;
+  border-radius: 5px;
+  margin: 20px;
+  color: #fff;
 }
-.default {
-  background-color: rgb(83, 224, 148);
-  padding: 5px;
-  border-radius: 2px;
+
+.atoms-button.primary {
+  background-color: rgb(64, 135, 230);
+}
+.atoms-button.default {
+  background-color: rgb(64, 135, 230);
 }
