@@ -25,6 +25,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
 import ListSubheader from "@material-ui/core/es/ListSubheader/ListSubheader";
 import Divider from "@material-ui/core/es/Divider/Divider";
+import PlayerAddSub from "../../../../components/players/PlayerAddSub";
 
 
 class GameScore extends Component {
@@ -128,21 +129,31 @@ class GameScore extends Component {
                                     <div key={i}>
                                         <Divider/>
                                         <ListItem>
-                                            <ListItemAvatar>
-                                                <Avatar>
+                                            <Grid item xs container direction={"row"}
+                                                  alignItems={"center"} justify={"center"}>
+                                                <Grid item xs={1} sm={2} className={"gridcenter"}>
                                                     <PersonIcon/>
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={player.firstName}/>
-                                            <ListItemSecondaryAction>
-                                                <IconButton aria-label="Delete" onClick={() => this.onSub(player)}>
-                                                    <RemoveIcon/>
-                                                </IconButton>
-                                                {player.value}
-                                                <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
-                                                    <AddIcon/>
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
+                                                </Grid>
+                                                <Grid item xs={8} sm={6}>
+                                                    <span>{player.firstName}</span>
+                                                </Grid>
+                                                <Grid item xs={1} sm={1} className={"gridcenter"}>
+                                                    <IconButton aria-label="Delete"
+                                                                onClick={() => this.onSub(player)}>
+                                                        <RemoveIcon/>
+                                                    </IconButton>
+                                                </Grid>
+                                                <Grid item xs={1} sm={2} className={"gridcenter"}>
+                                                    <Typography variant={"subtitle1"}
+                                                                align={"center"}
+                                                                className={"gridcenter"}> {player.value}</Typography>
+                                                </Grid>
+                                                <Grid item xs={1} sm={1} className={"gridcenter"}>
+                                                    <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
+                                                        <AddIcon/>
+                                                    </IconButton>
+                                                </Grid>
+                                            </Grid>
                                         </ListItem>
                                     </div>
                                 )}
@@ -157,21 +168,31 @@ class GameScore extends Component {
                                     <div key={i}>
                                         <Divider/>
                                         <ListItem>
-                                            <ListItemAvatar>
-                                                <Avatar>
+                                            <Grid item xs container direction={"row"}
+                                                  alignItems={"center"} justify={"center"}>
+                                                <Grid item xs={1} sm={2} className={"gridcenter"}>
                                                     <PersonIcon/>
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={player.firstName}/>
-                                            <ListItemSecondaryAction>
-                                                <IconButton aria-label="Delete" onClick={() => this.onSub(player)}>
-                                                    <RemoveIcon/>
-                                                </IconButton>
-                                                {player.value}
-                                                <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
-                                                    <AddIcon/>
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
+                                                </Grid>
+                                                <Grid item xs={8} sm={6}>
+                                                    <span>{player.firstName}</span>
+                                                </Grid>
+                                                <Grid item xs={1} sm={1} className={"gridcenter"}>
+                                                    <IconButton aria-label="Delete"
+                                                                onClick={() => this.onSub(player)}>
+                                                        <RemoveIcon/>
+                                                    </IconButton>
+                                                </Grid>
+                                                <Grid item xs={1} sm={2} className={"gridcenter"}>
+                                                    <Typography variant={"subtitle1"}
+                                                                align={"center"}
+                                                                className={"gridcenter"}> {player.value}</Typography>
+                                                </Grid>
+                                                <Grid item xs={1} sm={1} className={"gridcenter"}>
+                                                    <IconButton aria-label="Add" onClick={() => this.onAdd(player)}>
+                                                        <AddIcon/>
+                                                    </IconButton>
+                                                </Grid>
+                                            </Grid>
                                         </ListItem>
                                     </div>
                                 )}
