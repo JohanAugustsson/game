@@ -1,4 +1,4 @@
-const SET_GROUPS = 'SET_GROUPS';
+const SET_SERIES = 'SET_SERIES';
 const CLEAR = "CLEAR";
 // const REMOVE_GROUP = 'REMOVE_GROUP';
 
@@ -8,9 +8,9 @@ const initialState = {
   data: {},
 }
 
-const GroupReducer = (state= initialState, {type, payload}) =>{
+const SerieReducer = (state= initialState, {type, payload}) =>{
   switch (type) {
-    case SET_GROUPS: {
+    case SET_SERIES: {
       return {...state, data: payload, isFetched: true }
     }
     case CLEAR: {
@@ -22,5 +22,5 @@ const GroupReducer = (state= initialState, {type, payload}) =>{
   }
 }
 
-export default GroupReducer;
-export { SET_GROUPS };
+export default SerieReducer;
+export { SET_SERIES };

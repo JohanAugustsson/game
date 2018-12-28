@@ -1,16 +1,16 @@
 import firebase from "firebase";
-import { SET_PLAYER_GROUPS } from "../reducers/GroupReducer";
+import { SET_GROUPS } from "../reducers/GroupReducer";
 import { snackbarMsg, snackbarError } from './SnackbarActions'
 
 
 const COLLECTION_NAME = "groups";
 
 const groups = (payload) => ({
-    type: SET_PLAYER_GROUPS,
+    type: SET_GROUPS,
     payload
 });
 const addNewgroup = (payload) => ({
-    type: SET_PLAYER_GROUPS,
+    type: SET_GROUPS,
     payload
 });
 
@@ -54,8 +54,8 @@ const createPlayer = (player) => {
 // ---------------------  END --------------------------------
 
 
-
-const getGroupsPlayer = (userUid) => async (dispatch) => {
+// gets all groups for current user
+const getGroups = (userUid) => async (dispatch) => {
     return getGroupsFromDb(userUid)
       .then((groups) => {
 
@@ -75,6 +75,7 @@ const getGroupsPlayer = (userUid) => async (dispatch) => {
     });
 };
 
+// gets groups based on player uid
 function getGroupsFromDb(userUid) {
     return firebase.firestore()
         .collection('groupPlayers')
@@ -90,6 +91,7 @@ function getGroupsFromDb(userUid) {
         });
 }
 
+// get groups from db by groupId = doucment id
 function getGroup(groupId) {
   return firebase.firestore()
     .collection('groups')
@@ -113,4 +115,4 @@ function getGroup(groupId) {
 
 
 
-export { createGroup, getGroupsPlayer };
+export { createGroup, getGroups };

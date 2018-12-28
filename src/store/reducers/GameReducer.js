@@ -1,6 +1,5 @@
-const ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
-const REMOVE_USER_FROM_GAME = 'REMOVE_USER_FROM_GAME';
-const SELECT_GAME = 'SELECT_GAME';
+const SET_GAMES = 'SET_GAMES';
+const ADD_GAME = 'ADD_GAME';
 const CLEAR = "CLEAR";
 
 const initialState = {
@@ -12,7 +11,10 @@ const initialState = {
 const GameReducer = (state= initialState, {type, payload}) =>{
 
   switch (type) {
-    case SELECT_GAME: {
+    case SET_GAMES: {
+      return {...state, data: payload, isFetched: true }
+    }
+    case ADD_GAME: {
       return {...state, data: payload, isFetched: true }
     }
     case CLEAR: {
@@ -25,4 +27,4 @@ const GameReducer = (state= initialState, {type, payload}) =>{
 }
 
 export default GameReducer;
-export { ADD_USER_TO_GAME, REMOVE_USER_FROM_GAME, SELECT_GAME };
+export { SET_GAMES, ADD_GAME, CLEAR };

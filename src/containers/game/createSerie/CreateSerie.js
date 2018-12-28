@@ -6,9 +6,9 @@ import Select from '../../../atoms/select/Select';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-// import { createSerie } from '../../../store/actions/serieActions'
+import { createSerie  } from '../../../store/actions/SerieActions'
 import { getUsersFromDatabase } from '../../../store/actions/userActions'
-import { getGroupsPlayer } from '../../../store/actions/groupActions'
+import { getGroups } from '../../../store/actions/groupActions'
 import CheckboxListSecondary from '../../../components/list/list'
 // import "./Game.css";
 import SnackBar from '../../../components/snackbar/Snackbar'
@@ -20,7 +20,7 @@ class CreateSerie extends Component {
         super(props);
         this.state = {
             formField: {
-              group: "3EGYEr7hAO7hcfSQzr0C",
+              groupId: "3EGYEr7hAO7hcfSQzr0C",
               title: '',
               players: [],
             },
@@ -36,14 +36,14 @@ class CreateSerie extends Component {
             dispatch(getUsersFromDatabase());
         }
         if (!groupIsFetched) {
-            dispatch(getGroupsPlayer('3FuxgH0SHURX7iee7ozGL4MC9Hr1'));
+            dispatch(getGroups('3FuxgH0SHURX7iee7ozGL4MC9Hr1'));
         }
 
     }
 
 
     handleChange = (e, key) => {
-        const { formField } = this.state
+        const { formField } ={...this.state}
         formField[key] = e.target.value
         this.setState({formField});
     };
@@ -52,8 +52,7 @@ class CreateSerie extends Component {
     handleCreateSerie = () => {
         const {dispatch} = this.props;
         const { formField } = this.state;
-        console.log('skapar serie... inte påkopplad än');
-        // dispatch(createSerie( {...formField} ));
+        dispatch(createSerie( {...formField} ));
     };
 
 
@@ -65,8 +64,8 @@ class CreateSerie extends Component {
                 <div className={'paper'}>
                   <Select
                     label='Group'
-                    formkey='group'
-                    value={formField.group}
+                    formkey='groupId'
+                    value={formField.groupId}
                     onChange={this.handleChange}
                     data={groups.data}
                     dataselect={{selectLabel: 'name', selectValue: 'Id'}}
