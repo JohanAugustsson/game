@@ -1,18 +1,6 @@
-
-.container-loign{
-  display: flex;
-}
-.container-loign .form{
-  display: flex;
-  flex-direction: column;
-}
-
-
-.btn1 {
-  display: inline-block;
-  color: rgb(87, 188, 212);
-  border-radius: 10px;
-  font-size: 10px;
-  height: 50px;
-  width: 100px;
+.test {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    padding-bottom: 30%;
 }

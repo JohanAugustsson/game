@@ -16,7 +16,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import Link from "react-router-dom/es/Link";
-import Router from "../../Router";
 
 const drawerWidth = 240;
 
@@ -57,7 +56,11 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3,
+        paddingBottom: theme.spacing.unit * 3,
+        paddingTop: theme.spacing.unit * 5,
+        paddingLeft: theme.spacing.unit * 1,
+        paddingRight: theme.spacing.unit * 1,
+
     },
 });
 
@@ -71,7 +74,7 @@ class ResponsiveDrawer extends React.Component {
     };
 
     render() {
-        const {classes, theme} = this.props;
+        const {classes, theme, children} = this.props;
 
         const drawer = (
             <div>
@@ -152,7 +155,7 @@ class ResponsiveDrawer extends React.Component {
                     </Hidden>
                 </nav>
                 <main className={classes.content}>
-                    <Router/>
+                    {children}
                 </main>
             </div>
         );
