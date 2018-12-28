@@ -7,19 +7,25 @@ import Button from "../../atoms/buttons/buttons";
 import Grid from "@material-ui/core/Grid";
 import "./login.css"
 import Typography from "@material-ui/core/es/Typography/Typography";
+import {validateForm} from "../../core/formhelper";
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            formField: {
-                email: '',
-                password: '',
-                firstName: '',
-            },
-            error: {
-                name: '',
-                email: '',
+            form: {
+                fields: {
+                    email: '',
+                    password: '',
+                    firstName: '',
+                },
+                error: {
+                    name: '',
+                    email: '',
+                    password: '',
+                    firstName: '',
+                },
+                valid: false
             },
         }
     }
@@ -41,22 +47,32 @@ class Login extends Component {
         dispatch(createNewUser(data));
     };
 
+//Todo: Varför tvingas man att sätta form.valid = tempForm.valid för state ska uppdateras.
+// Borde räcka att skicka tempForm till setState. Har det med async state att göra?
     handleChange = (e, key) => {
-        const {formField} = this.state;
-        formField[key] = e.target.value;
-        this.setState({formField});
+        const {form} = this.state;
+        form.fields[key] = e.target.value;
+        this.validateFormAndUpdateState(form, key);
     };
 
+    validateFormAndUpdateState(form, key) {
+        let tempForm = validateForm(form, key || null);
+        form.fields = tempForm.fields;
+        form.error = tempForm.error;
+        form.valid = tempForm.valid;
+        this.setState({form});
+    }
 
     handleLogin = () => {
         const {dispatch} = this.props;
-        const {formField} = this.state;
-        console.log('loggar in');
-        dispatch(login(formField.email, formField.password));
+        const {form} = this.state;
+        if (form.valid) {
+            dispatch(login(form.fields.email, form.fields.password));
+        }
     };
 
     render() {
-        const {password, formField, error} = this.state;
+        const {password, form} = this.state;
 
         return (
             <Grid className={"test"}>
@@ -73,26 +89,18 @@ class Login extends Component {
                             <Input
                                 label='Email'
                                 formkey='email'
-                                value={formField.email}
+                                value={form.fields.email}
                                 onChange={this.handleChange}
-                                error={error.email}
+                                error={form.error.email}
                             />
                             <Input type={password}
                                    label='Password'
                                    formkey='password'
-                                   value={formField.password}
+                                   value={form.fields.password}
                                    onChange={this.handleChange}
-                                   error={error.password}
+                                   error={form.error.password}
                             />
                             <Button onClick={this.handleLogin}>Login</Button>
-
-                            {/* <div className={'form'}>
-                    Email: <input value={email} onChange={(e) => this.updateInput(e, 'email')}/>
-                    Lösenord: <input value={password} onChange={(e) => this.updateInput(e, 'password')}/>
-                    Förnamn: <input value={firstName} onChange={(e) => this.updateInput(e, 'firstName')}/>
-                    Efternamn: <input value={lastName} onChange={(e) => this.updateInput(e, 'lastName')}/>
-                    <Button variant={'primary'} onClick={this.createUser}> Skapa användare </Button>
-                </div>*/}
                         </Paper>
                     </Grid>
                 </Grid>
@@ -101,8 +109,10 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    cart: state.cart
-});
+const mapStateToProps = (state) => {
+    return {
+        isAuthenticated: state.auth.data && state.auth.data.user ? !!state.auth.data.user.uid : false
+    }
+};
 
 export default connect(mapStateToProps)(Login)
