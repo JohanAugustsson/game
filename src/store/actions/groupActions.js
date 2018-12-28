@@ -1,15 +1,16 @@
 import firebase from "firebase";
-import {ADD_GROUP } from "../reducers/GroupReducer";
+import { SET_PLAYER_GROUPS } from "../reducers/GroupReducer";
 import { snackbarMsg, snackbarError } from './SnackbarActions'
+
 
 const COLLECTION_NAME = "groups";
 
 const groups = (payload) => ({
-    type: ADD_GROUP,
+    type: SET_PLAYER_GROUPS,
     payload
 });
 const addNewgroup = (payload) => ({
-    type: ADD_GROUP,
+    type: SET_PLAYER_GROUPS,
     payload
 });
 
@@ -24,7 +25,6 @@ const createGroup = (group) => async (dispatch) => {
     delete group.players;
     return docRef.set(group)
         .then((group) => {
-            console.log(group);
             return dispatch(addNewgroup(group));
         }).then(()=>{
             return dispatch(snackbarMsg('Success'));
@@ -53,13 +53,29 @@ const createPlayer = (player) => {
 
 // ---------------------  END --------------------------------
 
-const getGroups = (userUid) => async (dispatch) => {
-    return getGroupsFromDatabase(userUid).then((actions) => {
-        dispatch((groups(actions)));
+
+
+const getGroupsPlayer = (userUid) => async (dispatch) => {
+    return getGroupsFromDb(userUid)
+      .then((groups) => {
+
+        const promises = [];
+        Object.keys(groups).forEach(groupPlayerKey => {
+            promises.push(getGroup(groups[groupPlayerKey].groupId));
+        })
+        return Promise.all(promises);
+      }).then((groupsData)=>{
+        const newObject = {};
+        groupsData.forEach(group =>{
+          newObject[group.Id] = group;
+        })
+        return dispatch(groups(newObject));
+      }).catch((e)=>{
+        return dispatch(snackbarError('something went wrong'))
     });
 };
 
-function getGroupsFromDatabase(userUid) {
+function getGroupsFromDb(userUid) {
     return firebase.firestore()
         .collection('groupPlayers')
         .where('userUid', '==', userUid)
@@ -70,11 +86,31 @@ function getGroupsFromDatabase(userUid) {
                 // doc.data() is never undefined for query doc snapshots
                 groups[doc.id] = doc.data();
             });
-            return groups;
+            return Promise.resolve(groups);
         });
+}
+
+function getGroup(groupId) {
+  return firebase.firestore()
+    .collection('groups')
+    .doc(groupId)
+    .get()
+    .then((doc)=> {
+      if (doc.exists) {
+        console.log(doc.data);
+        return Promise.resolve(doc.data());
+      } else {
+        console.log('did not find', groupId);
+        return Promise.resolve(null);
+      }
+    }).catch((error)=>{
+      return Promise.reject('something went wrong', error)
+    })
 }
 
 
 
 
-export { createGroup };
+
+
+export { createGroup, getGroupsPlayer };

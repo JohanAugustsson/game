@@ -5,7 +5,8 @@ import GameReducer from './GameReducer'
 import AllGamesReducer from './AllGamesReducer'
 import GameActivityReducer from "./GameActivityReducer";
 import GamePlayerReducer from "./GamePlayerReducer";
-import GroupReducer from "./GamePlayerReducer";
+import GroupReducer from "./GroupReducer";
+import GroupPlayerReducer from "./GroupPlayerReducer";
 import SnackbarReducer from "./SnackbarReducer";
 
 const RootReducer = combineReducers({
@@ -16,6 +17,7 @@ const RootReducer = combineReducers({
     gameActivities: GameActivityReducer,
     gamePlayer: GamePlayerReducer,
     groups: GroupReducer,
+    groupPlayer: GroupPlayerReducer,
     snackbar: SnackbarReducer,
 });
 

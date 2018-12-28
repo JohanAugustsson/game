@@ -1,4 +1,4 @@
-const ADD_GROUP = 'ADD_GROUP';
+const SET_PLAYER_GROUPS = 'SET_PLAYER_GROUPS';
 const CLEAR = "CLEAR";
 // const REMOVE_GROUP = 'REMOVE_GROUP';
 
@@ -9,9 +9,8 @@ const initialState = {
 }
 
 const GroupReducer = (state= initialState, {type, payload}) =>{
-
   switch (type) {
-    case ADD_GROUP: {
+    case SET_PLAYER_GROUPS: {
       return {...state, data: payload, isFetched: true }
     }
     case CLEAR: {
@@ -24,4 +23,4 @@ const GroupReducer = (state= initialState, {type, payload}) =>{
 }
 
 export default GroupReducer;
-export { ADD_GROUP };
+export { SET_PLAYER_GROUPS };
