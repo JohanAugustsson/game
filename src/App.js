@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
-import ResponsiveDrawer from "./components/responsiveDrawer/responsiveDrawer";
 import SnackBar from './components/snackbar/Snackbar'
+import Router from "./Router";
 
-const Navigation = () => (
-    <ResponsiveDrawer/>
-);
 
 class App extends Component {
     render() {
         return (
             <div className="page-container">
-                <Navigation/>
+                <Router/>
                 <SnackBar/>
             </div>
         )

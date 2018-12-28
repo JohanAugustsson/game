@@ -1,26 +1,26 @@
-const SET_USER = 'SET_USER';
-const CLEAR = "CLEAR";
+const LOGIN = 'LOGIN';
+const LOGOUT = "LOGOUT";
 
 const initialState = {
-  isFetched: false,
-  isFetching: false,
-  data: {}
-}
+    isFetched: false,
+    isFetching: false,
+    data: {}
+};
 
-const AuthReducer= (state= initialState, {type, payload}) =>{
+const AuthReducer = (state = initialState, {type, payload}) => {
 
-  switch (type) {
-    case SET_USER: {
-      return {...state, data: payload}
+    switch (type) {
+        case LOGIN: {
+            return {...state, data: payload, isFetched: true}
+        }
+        case LOGOUT: {
+            return initialState
+        }
+
+        default:
+            return state;
     }
-    case CLEAR: {
-      return initialState
-    }
-
-    default:
-      return state;
-  }
-}
+};
 
 export default AuthReducer;
-export { SET_USER, CLEAR };
+export {LOGIN, LOGOUT};
