@@ -88,7 +88,7 @@ class ResponsiveDrawer extends React.Component {
                 </div>
                 <Divider/>
                 <List>
-                    <ListItem button key={3} component={Link} to="/game">
+                    <ListItem button key={3} component={Link} to="/game/SV1ms2SzPurl4qbLvipv">
                         <ListItemIcon>
                             <InboxIcon/>
                         </ListItemIcon>

@@ -6,14 +6,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import PersonIcon from "@material-ui/icons/Person";
+import PermIdentity from '@material-ui/icons/PermIdentity';
 
 function PlayerAddSub({player, onAdd, onSubstract}) {
     return (
         <Grid item xs container direction={"row"}
               alignItems={"center"} justify={"center"}>
             <Grid item xs={1} sm={2} className={"playeraddsub-gridcenter"}>
-                <PersonIcon/>
+                <PermIdentity/>
             </Grid>
             <Grid item xs={8} sm={6}>
                 <span>{player.firstName}</span>

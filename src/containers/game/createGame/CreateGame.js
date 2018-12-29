@@ -21,7 +21,7 @@ class CreateGame extends Component {
         super(props);
         this.state = {
             formField: {
-              groupId: "3EGYEr7hAO7hcfSQzr0C",
+              groupId: "qEdoFMaWDV60wWiQcN8p",
               serieId: 'd',
               title: '',
               playersHome: [],
@@ -42,7 +42,7 @@ class CreateGame extends Component {
             dispatch(getGroups('3FuxgH0SHURX7iee7ozGL4MC9Hr1'));
         }
         if (!seriesIsFetched) {
-            dispatch(getSeries('vHV6yDdnAN2rsHY0oONE'));
+            dispatch(getSeries('qEdoFMaWDV60wWiQcN8p'));
         }
 
     }

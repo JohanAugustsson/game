@@ -1,6 +1,6 @@
 import firebase from "firebase";
-import { SET_GAMES, ADD_GAME } from '../reducers/GameReducer';
-import { snackbarMsg, snackbarError } from './SnackbarActions'
+import {ADD_GAME, SET_GAMES} from '../reducers/GameReducer';
+import {snackbarError, snackbarMsg} from './SnackbarActions'
 import {SET_ALL_GAMES} from '../reducers/AllGamesReducer';
 
 //
@@ -61,16 +61,6 @@ const setAllGames = (payload) => ({
 //
 const getGamesFromDatabase = (data) => async (dispatch) => {
     return getGamesFromFirestore().then((games) => {
-
-        const promises = [];
-               Object.values(games).forEach(game => {
-                   promises.push(getMemberList(game));
-               });
-
-               return Promise.all(promises)
-        ;
-        }).then((games) => {
-
         dispatch(setAllGames(games));
     });
 };
@@ -90,19 +80,11 @@ function getGamesFromFirestore(user) {
 
 
 const getGameFromDatabase = (gameId) => async (dispatch) => {
-    return getGameFromFirestore(gameId).then((games) => {
-        const promises = [];
-        Object.values(games).forEach(game => {
-            promises.push(getMemberList(game));
-            promises.push(getActivityList(game));
-        });
-
-        return Promise.all(promises);
-    }).then((games) => {
-        dispatch(setGame(games[0]));
-
+    return getGameFromFirestore(gameId).then((game) => {
+        dispatch(setGame(game));
     });
 };
+
 //
 function getGameFromFirestore(gameId) {
     return firebase.firestore()
@@ -119,36 +101,6 @@ function getGameFromFirestore(gameId) {
 }
 //
 //
-const getMemberList = (game) => {
-    return firebase.firestore()
-        .collection("gamePlayers")
-        .where('gameId', '==', game.id)
-        .get()
-        .then(function (querySnapshot) {
-            const members = {};
-            querySnapshot.forEach(function (doc) {
-                members[doc.id] = doc.data();
-            });
-            game.members = members;
-            return game;
-        });
-};
-//
-const getActivityList = (game) => {
-    return firebase.firestore()
-        .collection("gameActivity")
-        .where('gameId', '==', game.id)
-        .get()
-        .then(function (querySnapshot) {
-            const activities = {};
-            querySnapshot.forEach(function (doc) {
-                activities[doc.id] = doc.data();
-            });
-            game.activities = activities;
-            return game;
-        });
-};
-
 //
 // let unsubscribe = false;
 // const selectGame = (game) => async (dispatch) => {
@@ -208,10 +160,10 @@ const createNewGame = (game) => async (dispatch) => {
     return docRef.set(game)
         .then(() => {
             return dispatch(addGame(game));
-        }).then(()=>{
+        }).then(() => {
             return dispatch(snackbarMsg('Success'));
         })
-        .catch(()=>{
+        .catch(() => {
             return dispatch(snackbarError('Sorry something went wrong'))
         });
 
@@ -230,11 +182,11 @@ const addGamePlayers = (game) => {
 }
 
 const createPlayer = (player) => {
-  const docRef = firebase.firestore().collection('gamePlayers').doc();
-  player.id = docRef.id;
-  return docRef.set(player);
+    const docRef = firebase.firestore().collection('gamePlayers').doc();
+    player.uid = docRef.id;
+    return docRef.set(player);
 }
 
 // ---------------------  END --------------------------------
 
-export { createNewGame, getGameFromDatabase, getGamesFromDatabase };
+export {createNewGame, getGameFromDatabase, getGamesFromDatabase};

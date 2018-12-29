@@ -43,7 +43,7 @@ class Game extends Component {
     };
 
     renderPlayerList = () => {
-        const {currentGame, users } = this.props;
+        const {currentGame, users} = this.props;
         const {members} = currentGame;
         if (!members) return null;
 
@@ -62,26 +62,26 @@ class Game extends Component {
 
 
     createPlayer = (member) => {
-      console.log(member);
-      return (
-        <li key={member.uid}>
-          <PlayerAddSub
-            player={member}
-            onSubstract={() => this.addScoreToGame(member, 1)}
-            onAdd={() => this.addScoreToGame(member, -1)}
-          />
-        </li>
-      )
+        console.log(member);
+        return (
+            <li key={member.uid}>
+                <PlayerAddSub
+                    player={member}
+                    onSubstract={() => this.addScoreToGame(member, 1)}
+                    onAdd={() => this.addScoreToGame(member, -1)}
+                />
+            </li>
+        )
 
     };
 
     addScoreToGame = (member, value) => {
-        const {currentGame, dispatch } = this.props;
+        const {currentGame, dispatch} = this.props;
         const obj = {
-          type: 'SCORE',
-          gameId: currentGame.id,
-          value,
-          userId: member.uid,
+            type: 'SCORE',
+            gameId: currentGame.id,
+            value,
+            userUid: member.uid,
         }
         dispatch(addScoreActivityToGame(obj))
     }
@@ -95,31 +95,31 @@ class Game extends Component {
             home: null,
             away: null
         };
-        const title = (game.title )|| 'Inget spel valt'
+        const title = (game.title) || 'Inget spel valt'
 
         return (
             <div className={'container-game'}>
                 <div className={'wrapper-game'}>
                     <h3> {title} </h3>
                     <div>
-                      <div>
-                        Home
-                        <ul>
-                          {teamList.home}
-                        </ul>
-                      </div>
+                        <div>
+                            Home
+                            <ul>
+                                {teamList.home}
+                            </ul>
+                        </div>
                         Away
                         <div>
-                          <ul>
-                            {teamList.away}
-                          </ul>
-                      </div>
+                            <ul>
+                                {teamList.away}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <GameView/>
 
                 <Button variant={'btn-add'} onClick={this.createUser}> + </Button>
-                <button onClick={()=> dispatch(removeListener())}>ta bort listener manuellt</button>
+                <button onClick={() => dispatch(removeListener())}>ta bort listener manuellt</button>
             </div>
         )
     }

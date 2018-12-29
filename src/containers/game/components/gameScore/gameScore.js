@@ -54,16 +54,16 @@ class GameScore extends Component {
 
     renderPlayer() {
         const {activities, game, gamePlayer, users} = this.props;
-        if (gamePlayer && game && activities) {
-            return Object.keys(gamePlayer).map(member => {
-                let usr = gamePlayer[member];
+        if (gamePlayer && game && activities && users) {
+            return Object.keys(gamePlayer).map(player => {
+                let usr = gamePlayer[player];
                 let val = 0;
                 Object.keys(activities).map(activity => {
-                    if (activities[activity].userId === usr.uid) {
+                    if (activities[activity].userUid === usr.userUid) {
                         val = val + activities[activity].value;
                     }
                 });
-                return new Player(usr.uid, users[gamePlayer[member].uid].firstName, val, usr.gameId, usr.team)
+                return new Player(usr.userUid, users[usr.userUid].firstName, val, usr.gameId, usr.team)
             })
         }
         return [];

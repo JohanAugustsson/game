@@ -18,7 +18,7 @@ const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
     gameActivity.type = "SCORE";
     gameActivity.gameId = player.gameId;
     gameActivity.value = value;
-    gameActivity.userId = player.uid;
+    gameActivity.userUid = player.uid;
     gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
     const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
