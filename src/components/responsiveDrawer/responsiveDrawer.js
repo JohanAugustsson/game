@@ -118,6 +118,12 @@ class ResponsiveDrawer extends React.Component {
                         </ListItemIcon>
                         <ListItemText primary={"game score example"}/>
                     </ListItem>
+                    <ListItem button key={6} component={Link} to="/play">
+                        <ListItemIcon>
+                            <InboxIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"play"}/>
+                    </ListItem>
                 </List>
             </div>
         );

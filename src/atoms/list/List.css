@@ -1,0 +1,51 @@
+.atoms-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 5px;
+  margin: 3px;
+  cursor:default;
+  overflow: auto;
+  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+}
+.atoms-list .headers {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(125, 186, 250);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: #fff;
+  min-width: min-content;
+}
+.atoms-list .rows {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.90rem;
+  min-width: min-content;
+  border-bottom: 1px solid #cccccc;
+}
+.atoms-list .rows:hover {
+  background-color: rgb(136, 228, 231);
+}
+
+.atoms-list .rows > div, .atoms-list .headers > div{
+  min-width: 90px;
+  flex: 1;
+}
+.atoms-list .item {
+  margin: 5px;
+  padding: 5px;
+}
+
+.atoms-list button {
+  margin: 3px 0px;
+  max-width: 75px;
+  min-width: 75px;
+  border-radius: 5px;
+  height: 30px;
+  background-color: white;
+  background-color: rgb(64, 135, 230);
+  color: #fff;
+}
