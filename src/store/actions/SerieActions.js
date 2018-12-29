@@ -1,6 +1,6 @@
 import firebase from "firebase";
-import { SET_SERIES } from "../reducers/SerieReducer";
-import { snackbarMsg, snackbarError } from './SnackbarActions'
+import {SET_SERIES} from "../reducers/SerieReducer";
+import {snackbarError, snackbarMsg} from './SnackbarActions'
 
 
 const COLLECTION_NAME = "groups";
@@ -18,7 +18,7 @@ const addNewSerie = (payload) => ({
 // ------------------ Create group -----------------------------------------
 const createSerie = (serie) => async (dispatch) => {
     const docRef = firebase.firestore().collection('series').doc();
-    serie.Id = docRef.id;
+    serie.id = docRef.id;
     serie.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     await addGroupPlayers(serie);
 
@@ -26,29 +26,29 @@ const createSerie = (serie) => async (dispatch) => {
     return docRef.set(serie)
         .then((serie) => {
             return dispatch(addNewSerie(serie));
-        }).then(()=>{
+        }).then(() => {
             return dispatch(snackbarMsg('Success'));
         })
-        .catch(()=>{
-          return dispatch(snackbarError('Sorry something went wrong'))
+        .catch(() => {
+            return dispatch(snackbarError('Sorry something went wrong'))
         });
 
 };
 
 const addGroupPlayers = (serie) => {
     const promises = [];
-    const { createdAt, Id, groupId } = serie;
-    serie.players.forEach(uid=>{
-      promises.push(createPlayer({ groupId: uid, createdAt, groupId, serieId: Id }))
+    const {createdAt, id, groupId} = serie;
+    serie.players.forEach(uid => {
+        promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId: id}))
     })
     return Promise.all(promises);
 }
 
 const createPlayer = (player) => {
-  return firebase.firestore()
-    .collection('seriePlayers')
-    .doc()
-    .set(player);
+    return firebase.firestore()
+        .collection('seriePlayers')
+        .doc()
+        .set(player);
 }
 
 // ---------------------  END --------------------------------
@@ -56,12 +56,12 @@ const createPlayer = (player) => {
 // gets serie based on groupId
 const getSeries = (groupId) => async (dispatch) => {
     return getSeriesFromDb(groupId)
-      .then((series) => {
-        console.log('alla serier: ', series);
-        return dispatch(seriesSet(series))
-      }).catch((e)=>{
-        return dispatch(snackbarError('something went wrong'))
-    });
+        .then((series) => {
+            console.log('alla serier: ', series);
+            return dispatch(seriesSet(series))
+        }).catch((e) => {
+            return dispatch(snackbarError('something went wrong'))
+        });
 };
 
 // gets groups based on player uid
@@ -100,4 +100,4 @@ function getSeriesFromDb(groupId) {
 // }
 
 
-export { createSerie, getSeries };
+export {createSerie, getSeries};

@@ -121,7 +121,7 @@ function getGameFromFirestore(gameId) {
 //
 const getMemberList = (game) => {
     return firebase.firestore()
-        .collection("gameMembers")
+        .collection("gamePlayers")
         .where('gameId', '==', game.id)
         .get()
         .then(function (querySnapshot) {
@@ -199,7 +199,7 @@ const getActivityList = (game) => {
 // ------------------ Create Game -----------------------------------------
 const createNewGame = (game) => async (dispatch) => {
     const docRef = firebase.firestore().collection('games').doc();
-    game.Id = docRef.id;
+    game.id = docRef.id;
     game.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     await addGamePlayers(game);
 
@@ -219,12 +219,12 @@ const createNewGame = (game) => async (dispatch) => {
 
 const addGamePlayers = (game) => {
     const promises = [];
-    const { createdAt, Id, groupId, serieId } = game;
-    game.playersHome.forEach(uid=>{
-      promises.push(createPlayer({ userUid: uid, createdAt, groupId, serieId , gameId: Id, team: 'Home' }))
+    const {createdAt, id, groupId, serieId} = game;
+    game.playersHome.forEach(uid => {
+        promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId, gameId: id, team: 'Home'}))
     })
-    game.playersAway.forEach(uid=>{
-      promises.push(createPlayer({ userUid: uid, createdAt, groupId, serieId , gameId: Id, team: 'Away' }))
+    game.playersAway.forEach(uid => {
+        promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId, gameId: id, team: 'Away'}))
     })
     return Promise.all(promises);
 }

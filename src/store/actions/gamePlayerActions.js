@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import {GAMEPLAYER_ADD_PLAYER, GAMEPLAYER_ADD_PLAYERS} from "../reducers/GamePlayerReducer";
 
-const COLLECTION_NAME = "gameMembers";
+const COLLECTION_NAME = "gamePlayers";
 
 const addPlayers = (payload) => ({
     type: GAMEPLAYER_ADD_PLAYERS,
@@ -16,7 +16,7 @@ const addPlayer = (payload) => ({
 const addPlayerToGame = (user) => async (dispatch) => {
     user.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     firebase.firestore()
-        .collection('gameMembers')
+        .collection(COLLECTION_NAME)
         .doc()
         .set(user)
         .then((users) => {
