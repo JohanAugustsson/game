@@ -121,7 +121,7 @@ function getGameFromFirestore(gameId) {
 //
 const getMemberList = (game) => {
     return firebase.firestore()
-        .collection("gameMembers")
+        .collection("gamePlayers")
         .where('gameId', '==', game.id)
         .get()
         .then(function (querySnapshot) {
@@ -199,7 +199,7 @@ const getActivityList = (game) => {
 // ------------------ Create Game -----------------------------------------
 const createNewGame = (game) => async (dispatch) => {
     const docRef = firebase.firestore().collection('games').doc();
-    game.Id = docRef.id;
+    game.id = docRef.id;
     game.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     await addGamePlayers(game);
 
