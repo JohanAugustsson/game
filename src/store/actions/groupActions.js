@@ -37,9 +37,9 @@ const createGroup = (group) => async (dispatch) => {
 
 const addGroupPlayers = (group) => {
     const promises = [];
-    const { createdAt, Id } = group;
+    const { createdAt, id } = group;
     group.players.forEach(uid=>{
-      promises.push(createPlayer({ userUid: uid, createdAt, groupId: Id }))
+      promises.push(createPlayer({ userUid: uid, createdAt, groupId: id }))
     })
     return Promise.all(promises);
 }
