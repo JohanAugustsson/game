@@ -18,7 +18,7 @@ const addNewSerie = (payload) => ({
 // ------------------ Create group -----------------------------------------
 const createSerie = (serie) => async (dispatch) => {
     const docRef = firebase.firestore().collection('series').doc();
-    serie.Id = docRef.id;
+    serie.id = docRef.id;
     serie.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     await addGroupPlayers(serie);
 

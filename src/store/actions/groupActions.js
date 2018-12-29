@@ -18,7 +18,7 @@ const addNewgroup = (payload) => ({
 // ------------------ Create group -----------------------------------------
 const createGroup = (group) => async (dispatch) => {
     const docRef = firebase.firestore().collection('groups').doc();
-    group.Id = docRef.id;
+    group.id = docRef.id;
     group.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     await addGroupPlayers(group);
 
@@ -67,7 +67,7 @@ const getGroups = (userUid) => async (dispatch) => {
       }).then((groupsData)=>{
         const newObject = {};
         groupsData.forEach(group =>{
-          newObject[group.Id] = group;
+          newObject[group.id] = group;
         })
         return dispatch(groups(newObject));
       }).catch((e)=>{

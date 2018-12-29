@@ -219,12 +219,12 @@ const createNewGame = (game) => async (dispatch) => {
 
 const addGamePlayers = (game) => {
     const promises = [];
-    const { createdAt, Id, groupId, serieId } = game;
-    game.playersHome.forEach(uid=>{
-      promises.push(createPlayer({ userUid: uid, createdAt, groupId, serieId , gameId: Id, team: 'Home' }))
+    const {createdAt, id, groupId, serieId} = game;
+    game.playersHome.forEach(uid => {
+        promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId, gameId: id, team: 'Home'}))
     })
-    game.playersAway.forEach(uid=>{
-      promises.push(createPlayer({ userUid: uid, createdAt, groupId, serieId , gameId: Id, team: 'Away' }))
+    game.playersAway.forEach(uid => {
+        promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId, gameId: id, team: 'Away'}))
     })
     return Promise.all(promises);
 }
