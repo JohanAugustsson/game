@@ -9,7 +9,8 @@ class App extends Component {
     componentDidMount() {
         store.subscribe(res => {
             saveState({
-                auth: store.getState().auth
+                auth: store.getState().auth,
+                timestamp: new Date().getTime()
             });
         });
     }

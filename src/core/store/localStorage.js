@@ -4,7 +4,15 @@ export const loadState = () => {
         if (serializedState === null) {
             return undefined;
         }
-        return JSON.parse(serializedState);
+        let state = JSON.parse(serializedState);
+        let date = new Date(state.timestamp).getDate();
+        let notBeforeDate = new Date().getDate() - 1;
+        if (date >= notBeforeDate) {
+            delete state.timestamp;
+            return state;
+        } else {
+            return undefined
+        }
     } catch (err) {
         return undefined;
     }
