@@ -1,4 +1,4 @@
-const SET_ALL_USERS = 'SET_ALL_USERS';
+const SET_USERS = 'SET_USERS';
 const CLEAR = "CLEAR";
 
 const initialState = {
@@ -10,7 +10,7 @@ const initialState = {
 const UsersReducer = (state= initialState, {type, payload}) =>{
 
   switch (type) {
-    case SET_ALL_USERS: {
+    case SET_USERS: {
       return {...state, data: payload, isFetched: true }
     }
     case CLEAR: {
@@ -23,4 +23,4 @@ const UsersReducer = (state= initialState, {type, payload}) =>{
 }
 
 export default UsersReducer;
-export { SET_ALL_USERS, CLEAR };
+export { SET_USERS, CLEAR };

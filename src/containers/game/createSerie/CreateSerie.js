@@ -4,7 +4,7 @@ import Button from '../../../atoms/buttons/buttons';
 import Input from '../../../atoms/input/Input';
 import Select from '../../../atoms/select/Select';
 import {createSerie} from '../../../core/store/actions/SerieActions'
-import {getUsersFromDatabase} from '../../../core/store/actions/userActions'
+import {getUsers} from '../../../core/store/actions/userActions'
 import {getGroups} from '../../../core/store/actions/groupActions'
 import CheckboxListSecondary from '../../../components/list/list'
 
@@ -16,22 +16,22 @@ class CreateSerie extends Component {
         super(props);
         this.state = {
             formField: {
-                groupId: "UWVdOG5el27jsNW41jYd",
+                groupId: '',
                 title: '',
                 players: [],
             },
             error: {},
         };
 
-        const {game, userIsFetched, groupIsFetched, dispatch} = props;
+        const {game, usersIsFetched, groupsIsFetched, dispatch, user} = props;
         // if ( !game.isFetched ){
         //    dispatch(getGamesFromDatabase());
         // }
-        if (!userIsFetched) {
-            dispatch(getUsersFromDatabase());
+        if (!usersIsFetched) {
+            dispatch(getUsers());
         }
-        if (!groupIsFetched) {
-            dispatch(getGroups('3FuxgH0SHURX7iee7ozGL4MC9Hr1'));
+        if (!groupsIsFetched) {
+            dispatch(getGroups(user.uid));
         }
 
     }
@@ -45,9 +45,9 @@ class CreateSerie extends Component {
 
 
     handleCreateSerie = () => {
-        const {dispatch} = this.props;
+        const {dispatch, user} = this.props;
         const {formField} = this.state;
-        dispatch(createSerie({...formField}));
+        dispatch(createSerie({...formField, createdBy: user.uid }));
     };
 
 
@@ -56,14 +56,14 @@ class CreateSerie extends Component {
         const {users, groups} = this.props;
         return (
             <div className={'container-game'}>
-                <div className={'paper'}>
+                <div className={'sheet'}>
                     <Select
                         label='Group'
                         formkey='groupId'
                         value={formField.groupId}
                         onChange={this.handleChange}
                         data={groups.data}
-                        dataselect={{selectLabel: 'name', selectValue: 'id'}}
+                        dataselect={{selectLabel: 'title', selectValue: 'id'}}
                     />
                     <Input
                         label='Title of the serie'
@@ -86,12 +86,13 @@ class CreateSerie extends Component {
 }
 
 const mapStateToProps = (store) => ({
+    user: store.auth.data.user,
     users: store.users,
     games: store.games,
     game: store.game,
-    userIsFetched: store.users.isFetched,
+    usersIsFetched: store.users.isFetched,
     groups: store.groups,
-    groupIsFetched: store.groups.isFetched
+    groupsIsFetched: store.groups.isFetched
 });
 
 export default connect(mapStateToProps)(CreateSerie)

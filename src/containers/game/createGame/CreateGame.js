@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { createSerie, getSeries  } from '../../../core/store/actions/SerieActions'
-import { getUsersFromDatabase } from '../../../core/store/actions/userActions'
+import { getUsers } from '../../../core/store/actions/userActions'
 import { getGroups } from '../../../core/store/actions/groupActions'
 import { createNewGame } from '../../../core/store/actions/gameActions'
 import CheckboxListSecondary from '../../../components/list/list'
@@ -36,7 +36,7 @@ class CreateGame extends Component {
         //    dispatch(getGamesFromDatabase());
         // }
         if (!userIsFetched) {
-            dispatch(getUsersFromDatabase());
+            dispatch(getUsers());
         }
         if (!groupIsFetched) {
             dispatch(getGroups('3FuxgH0SHURX7iee7ozGL4MC9Hr1'));
@@ -70,7 +70,7 @@ class CreateGame extends Component {
 
         return (
             <div className={'container-game'}>
-                <div className={'paper'}>
+                <div className={'sheet'}>
                   <Select
                     label='Group'
                     formkey='groupId'

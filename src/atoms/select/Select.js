@@ -30,6 +30,7 @@ function Select (props) {
         {...props}
         onChange={e=>props.onChange(e, props.formkey)}
       >
+        <option>-</option>
         {optionList}
       </select>
       <label className='label-bottom'>

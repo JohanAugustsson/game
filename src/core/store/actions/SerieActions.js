@@ -37,9 +37,9 @@ const createSerie = (serie) => async (dispatch) => {
 
 const addGroupPlayers = (serie) => {
     const promises = [];
-    const {createdAt, id, groupId} = serie;
+    const {createdAt, createdBy, id, groupId} = serie;
     serie.players.forEach(uid => {
-        promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId: id}))
+        promises.push(createPlayer({userUid: uid, createdAt, createdBy, groupId, serieId: id}))
     })
     return Promise.all(promises);
 }
@@ -53,22 +53,32 @@ const createPlayer = (player) => {
 
 // ---------------------  END --------------------------------
 
-// gets serie based on groupId
-const getSeries = (groupId) => async (dispatch) => {
-    return getSeriesFromDb(groupId)
-        .then((series) => {
-            console.log('alla serier: ', series);
-            return dispatch(seriesSet(series))
-        }).catch((e) => {
-            return dispatch(snackbarError('something went wrong'))
-        });
+// gets all series for current user
+const getSeries = (userUid) => async (dispatch) => {
+    return getGroupsFromDb(userUid)
+      .then((series) => {
+
+        const promises = [];
+        Object.keys(series).forEach(seriePlayerKey => {
+            promises.push(getSerie(series[seriePlayerKey].serieId));
+        })
+        return Promise.all(promises);
+      }).then((seriesData)=>{
+        const newObject = {};
+        seriesData.forEach(serie =>{
+          newObject[serie.id] = serie;
+        })
+        return dispatch(seriesSet(newObject));
+      }).catch((e)=>{
+        return dispatch(snackbarError('something went wrong'))
+    });
 };
 
 // gets groups based on player uid
-function getSeriesFromDb(groupId) {
+function getGroupsFromDb(userUid) {
     return firebase.firestore()
-        .collection('series')
-        .where('groupId', '==', groupId)
+        .collection('seriePlayers')
+        .where('userUid', '==', userUid)
         .get()
         .then(function (querySnapshot) {
             const series = {};
@@ -81,23 +91,23 @@ function getSeriesFromDb(groupId) {
 }
 
 // get groups from db by groupId = doucment id
-// function getSerie(groupId) {
-//   return firebase.firestore()
-//     .collection('groups')
-//     .doc(groupId)
-//     .get()
-//     .then((doc)=> {
-//       if (doc.exists) {
-//         console.log(doc.data);
-//         return Promise.resolve(doc.data());
-//       } else {
-//         console.log('did not find', groupId);
-//         return Promise.resolve(null);
-//       }
-//     }).catch((error)=>{
-//       return Promise.reject('something went wrong', error)
-//     })
-// }
+function getSerie(serieId) {
+  return firebase.firestore()
+    .collection('series')
+    .doc(serieId)
+    .get()
+    .then((doc)=> {
+      if (doc.exists) {
+        return Promise.resolve(doc.data());
+      } else {
+        console.log('did not find', serieId);
+        return Promise.resolve(null);
+      }
+    }).catch((error)=>{
+      return Promise.reject('something went wrong', error)
+    })
+}
+
 
 
 export {createSerie, getSeries};

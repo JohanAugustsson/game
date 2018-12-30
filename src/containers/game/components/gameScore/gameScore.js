@@ -7,7 +7,7 @@ import {
     removeActivityListener
 } from "../../../../core/store/actions/gameActivityActions";
 import {Player} from "../../../../core/model/player";
-import {getUsersFromDatabase} from "../../../../core/store/actions/userActions";
+import {getUsers} from "../../../../core/store/actions/userActions";
 import {getGameFromDatabase, getGamesFromDatabase} from "../../../../core/store/actions/gameActions";
 import {getGamePlayersFromDB} from "../../../../core/store/actions/gamePlayerActions";
 import List from '@material-ui/core/List';
@@ -32,7 +32,7 @@ class GameScore extends Component {
     componentWillMount() {
         const {userIsFetched, gamesIsFetched, gamePlayerIsFetched, gameIsFetched, dispatch} = this.props;
         if (!userIsFetched) {
-            dispatch(getUsersFromDatabase());
+            dispatch(getUsers());
         }
         if (!gamesIsFetched) {
             dispatch(getGamesFromDatabase());

@@ -37,9 +37,9 @@ const createGroup = (group) => async (dispatch) => {
 
 const addGroupPlayers = (group) => {
     const promises = [];
-    const { createdAt, id } = group;
+    const { createdAt, createdBy, id } = group;
     group.players.forEach(uid=>{
-      promises.push(createPlayer({ userUid: uid, createdAt, groupId: id }))
+      promises.push(createPlayer({ userUid: uid, createdAt, createdBy, groupId: id }))
     })
     return Promise.all(promises);
 }
@@ -99,7 +99,6 @@ function getGroup(groupId) {
     .get()
     .then((doc)=> {
       if (doc.exists) {
-        console.log(doc.data);
         return Promise.resolve(doc.data());
       } else {
         console.log('did not find', groupId);

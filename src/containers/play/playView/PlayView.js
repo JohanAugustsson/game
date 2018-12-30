@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
+import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -8,29 +9,33 @@ import Input from '../../../atoms/input/Input';
 import Select from '../../../atoms/select/Select';
 import List from '../../../atoms/list/List';
 import SnackBar from '../../../components/snackbar/Snackbar'
+import { getGroups } from '../../../core/store/actions/groupActions'
 import { getSeries  } from '../../../core/store/actions/SerieActions'
+import { getUsers } from '../../../core/store/actions/userActions'
 import './PlayView.css';
 
-
-const dataForList = {
-  efaef: { name: 'johan', age: 38, city: 'Göteborg' },
-  feffe: { name: 'peter', age: 38, city: 'Stockholm' },
-}
-
 const labelList = {
-  headers: ['Name','Age','City'],
+  headers: ['Title','Group','Created by','Date','SerieId'],
   tabelKeys: [
     {
       type: 'text',
-      value: 'name'
+      value: 'title'
+    },
+    {
+      type: 'text',
+      value: 'groupTitle'
+    },
+    {
+      type: 'text',
+      value: 'createdByName'
+    },
+    {
+      type: 'text',
+      value: 'date'
     },
     {
       type: 'button',
-      value: 'age'
-    },
-    {
-      type: 'button',
-      value: 'city',
+      value: 'btn',
     }
   ]
 }
@@ -40,35 +45,32 @@ class PlayView extends Component {
         super(props);
         this.state = {
             formField: {
-              groupId: "3EGYEr7hAO7hcfSQzr0C",
-              serieId: 'd',
+              groupId: '',
+              serieId: '',
               title: '',
               playersHome: [],
               playersAway: [],
             },
-            error: {
-            },
+            error: {}
         }
 
-        const { seriesIsFetched, dispatch } = props;
-        // if ( !game.isFetched ){
-        //    dispatch(getGamesFromDatabase());
-        // }
-        // if (!userIsFetched) {
-        //     dispatch(getUsersFromDatabase());
-        // }
-        // if (!groupIsFetched) {
-        //     dispatch(getGroups('3FuxgH0SHURX7iee7ozGL4MC9Hr1'));
-        // }
-        if (!seriesIsFetched) {
-            dispatch(getSeries('yX0vZHRTHBZQFkYs1QxFKUL7x6v2'));
+        const { dispatch, seriesIsFetched, usersIsFetched, groupsIsFetched, user } = props;
+        if (!usersIsFetched) {
+            dispatch(getUsers(user.uid));
         }
+
+        if (!groupsIsFetched) {
+            dispatch(getGroups(user.uid));
+        }
+        if (!seriesIsFetched) {
+            dispatch(getSeries(user.uid));
+        }
+
 
     }
 
 
     handleChange = (e, key) => {
-        console.log(e, key);
         const { formField } ={...this.state}
         formField[key] = e.target.value
         this.setState({formField});
@@ -86,14 +88,30 @@ class PlayView extends Component {
       console.log('funkar ', e);
     }
 
+    generateTableData = () => {
+      const { users, series, groups } = this.props;
+      if (!users || !series || !groups) return {};
+      const newTableObj = {}
+
+      Object.keys(series).map(serieKey=>{
+        const serie = series[serieKey];
+        newTableObj[serieKey] = {...serie};
+        newTableObj[serieKey].groupTitle = groups[serie.groupId] && groups[serie.groupId].title || 'missing';
+        newTableObj[serieKey].createdByName = users[serie.createdBy] && users[serie.createdBy].firstName && users[serie.createdBy].lastName && users[serie.createdBy].firstName + ' '+ users[serie.createdBy].lastName   || 'missing';
+        newTableObj[serieKey].btn = 'Select'
+        newTableObj[serieKey].date = moment(serie.createdAt.toDate()).format('YYYY-MM-DD HH:MM');
+      })
+      return newTableObj;
+    }
 
     render() {
         const { formField, error } = this.state;
-        const { users, groups, series } = this.props;
+
+        const tableData = this.generateTableData();
 
         return (
             <div className={'container-playview'}>
-                <div className={'paper'}>
+                <div className={'sheet'}>
                   <Input
                     label='Name of the game'
                     formkey='title'
@@ -102,7 +120,7 @@ class PlayView extends Component {
                     error={error.title}
                   />
                   <List
-                    data={dataForList}
+                    data={tableData}
                     dataselect={labelList}
                     onClick={this.handleList}
                   />
@@ -114,14 +132,13 @@ class PlayView extends Component {
 }
 
 const mapStateToProps = (store) => ({
-    users: store.users,
-    games: store.games,
-    game: store.game,
-    userIsFetched: store.users.isFetched,
-    groups: store.groups,
-    groupIsFetched: store.groups.isFetched,
-    series: store.series,
-    seriesIsFetched: store.series.isFetched
+    user: store.auth.data.user,
+    users: store.users.data,
+    usersIsFetched: store.users.isFetched,
+    series: store.series.data,
+    seriesIsFetched: store.series.isFetched,
+    groups: store.groups.data,
+    groupsIsFetched: store.groups.isFetched
 });
 
 export default connect(mapStateToProps)(PlayView)

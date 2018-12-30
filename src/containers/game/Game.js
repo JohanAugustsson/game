@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import "./Game.css";
 import {createNewUser} from '../../core/store/actions/authAction'
-import {getUsersFromDatabase} from '../../core/store/actions/userActions'
+import {getUsers} from '../../core/store/actions/userActions'
 import {getGamesFromDatabase, removeListener} from '../../core/store/actions/gameActions'
 import {addScoreActivityToGame} from '../../core/store/actions/gameActivityActions'
 import Button from '../../atoms/buttons/buttons';
@@ -19,7 +19,7 @@ class Game extends Component {
 
         const {userIsFetched, gamesIsFetched, dispatch} = props;
         if (!userIsFetched) {
-            dispatch(getUsersFromDatabase());
+            dispatch(getUsers());
         }
         if (!gamesIsFetched) {
             dispatch(getGamesFromDatabase());

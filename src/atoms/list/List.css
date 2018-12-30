@@ -33,14 +33,16 @@
 .atoms-list .rows > div, .atoms-list .headers > div{
   min-width: 90px;
   flex: 1;
+  display: flex;
+  align-items: center;
 }
 .atoms-list .item {
   margin: 5px;
   padding: 5px;
+  overflow: hidden;
 }
 
 .atoms-list button {
-  margin: 3px 0px;
   max-width: 75px;
   min-width: 75px;
   border-radius: 5px;

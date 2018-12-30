@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { createGroup } from '../../../core/store/actions/groupActions'
-import { getUsersFromDatabase } from '../../../core/store/actions/userActions'
+import { getUsers } from '../../../core/store/actions/userActions'
 import CheckboxListSecondary from '../../../components/list/list'
 // import "./Game.css";
 import SnackBar from '../../../components/snackbar/Snackbar'
@@ -18,21 +18,21 @@ class CreateGroup extends Component {
         super(props);
         this.state = {
             formField: {
-              name: '',
+              title: '',
               password: '',
               players: [],
             },
             error: {
-              name: 'this is error'
+              title: 'this is error'
             },
         }
 
-        const { game, userIsFetched, dispatch } = props;
+        const { game, userIsFetched, dispatch, user } = props;
         // if ( !game.isFetched ){
         //    dispatch(getGamesFromDatabase());
         // }
         if (!userIsFetched) {
-            dispatch(getUsersFromDatabase());
+            dispatch(getUsers(user.uid));
         }
     }
 
@@ -45,10 +45,11 @@ class CreateGroup extends Component {
 
 
     handleCreateGroup = () => {
-        const {dispatch} = this.props;
+        const {dispatch, user} = this.props;
         const { formField } = this.state;
-        console.log('skapar game');
-        dispatch(createGroup( {...formField} ));
+        console.log('skapar game', user.uid);
+
+        dispatch(createGroup( {...formField, createdBy: user.uid} ));
     };
 
 
@@ -57,10 +58,10 @@ class CreateGroup extends Component {
         const { users } = this.props;
         return (
             <div className={'container-game'}>
-                <div className={'paper'}>
+                <div className={'sheet'}>
                   <Input
                     label='Title of the group'
-                    formkey='name'
+                    formkey='title'
                     value={formField.title}
                     onChange={this.handleChange}
                     error={error.title}
@@ -68,9 +69,9 @@ class CreateGroup extends Component {
                   <Input
                     label='Password'
                     formkey='password'
-                    value={formField.title}
+                    value={formField.password}
                     onChange={this.handleChange}
-                    error={error.title}
+                    error={error.password}
                   />
                   <CheckboxListSecondary
                     data={users.data}
@@ -86,6 +87,7 @@ class CreateGroup extends Component {
 }
 
 const mapStateToProps = (store) => ({
+    user: store.auth.data.user,
     users: store.users,
     games: store.games,
     game: store.game,

@@ -3,7 +3,7 @@ import './List.css';
 
 // read example at the end
 function List (props) {
-  if (!props.dataselect) return null;
+  if (!props.dataselect || !props.data) return null;
   const { data } = props;
   const { headers, tabelKeys } = props.dataselect;
 
@@ -19,7 +19,7 @@ function List (props) {
       // if button current cell is button
       if (item.type === 'button')
         return  (
-          <div key={index + '-' + rowData}>
+          <div className='item' key={index + '-' + rowData}>
             <button
               onClick={()=> props.onClick({rowData: row,  rowKey: itemKey, clickedValue: rowData, columnKey:item.value, rowNb: index })}
             >
