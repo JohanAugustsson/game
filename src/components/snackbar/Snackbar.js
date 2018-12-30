@@ -5,8 +5,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { SNACKBAR_CLOSE } from '../../store/reducers/SnackbarReducer';
-import { snackbarMsg, snackbarError, snackbarClose } from '../../store/actions/SnackbarActions'
+import { SNACKBAR_CLOSE } from '../../core/store/reducers/SnackbarReducer';
+import { snackbarMsg, snackbarError, snackbarClose } from '../../core/store/actions/SnackbarActions'
 
 const style = ({
   error: {

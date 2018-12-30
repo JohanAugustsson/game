@@ -1,5 +1,7 @@
 import firebase from "firebase";
 import {LOGIN, LOGOUT} from '../reducers/authReducer';
+import {saveState} from "../localStorage";
+import store from "../store";
 
 const loginUser = (payload) => ({
     type: LOGIN,
@@ -34,7 +36,8 @@ const createNewUser = (data) => async (dispatch) => {
         });
 };
 
-const authentication = () => {
+
+const authentication1 = () => {
     return firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // User is signed in.
@@ -52,12 +55,22 @@ const authentication = () => {
         }
     })
 };
+const authentication = () => {
+    return firebase.auth().currentUser
+};
+
+const updateAuth = (user) => async (dispatch) => {
+    dispatch(loginUser(user))
+};
 
 const login = (email, password) => async (dispatch) => {
     return firebase.auth()
         .signInWithEmailAndPassword(email, password)
         .then(res => {
             console.log(res);
+            saveState({
+                auth: res
+            });
             dispatch(loginUser(res));
         })
         .catch(error => {
@@ -90,4 +103,4 @@ function saveUserDataToFirestore(user) {
 }
 
 
-export {createNewUser, authentication, login, logout};
+export {createNewUser, authentication, login, logout, updateAuth};

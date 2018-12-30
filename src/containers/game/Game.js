@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import "./Game.css";
-import {createNewUser} from '../../store/actions/authAction'
-import {getUsersFromDatabase} from '../../store/actions/userActions'
-import {getGamesFromDatabase, removeListener} from '../../store/actions/gameActions'
-import {addScoreActivityToGame} from '../../store/actions/gameActivityActions'
+import {createNewUser} from '../../core/store/actions/authAction'
+import {getUsersFromDatabase} from '../../core/store/actions/userActions'
+import {getGamesFromDatabase, removeListener} from '../../core/store/actions/gameActions'
+import {addScoreActivityToGame} from '../../core/store/actions/gameActivityActions'
 import Button from '../../atoms/buttons/buttons';
 import GameView from './GameView';
 import PlayerAddSub from "../../components/players/PlayerAddSub";

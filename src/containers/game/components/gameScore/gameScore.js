@@ -5,11 +5,11 @@ import {
     addScoreActivityToGame,
     listenAtActivity,
     removeActivityListener
-} from "../../../../store/actions/gameActivityActions";
-import {Player} from "../../../../model/player";
-import {getUsersFromDatabase} from "../../../../store/actions/userActions";
-import {getGameFromDatabase, getGamesFromDatabase} from "../../../../store/actions/gameActions";
-import {getGamePlayersFromDB} from "../../../../store/actions/gamePlayerActions";
+} from "../../../../core/store/actions/gameActivityActions";
+import {Player} from "../../../../core/model/player";
+import {getUsersFromDatabase} from "../../../../core/store/actions/userActions";
+import {getGameFromDatabase, getGamesFromDatabase} from "../../../../core/store/actions/gameActions";
+import {getGamePlayersFromDB} from "../../../../core/store/actions/gamePlayerActions";
 import List from '@material-ui/core/List';
 import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";

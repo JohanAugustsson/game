@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {createNewUser, login} from '../../store/actions/authAction'
+import {createNewUser, login} from '../../core/store/actions/authAction'
 import Paper from "@material-ui/core/Paper";
 import Input from "../../atoms/input/Input";
 import Button from "../../atoms/buttons/buttons";

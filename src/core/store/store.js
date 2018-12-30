@@ -1,7 +1,8 @@
-import { createStore, combineReducers, applyMiddleware,compose } from 'redux';
+import {applyMiddleware, compose, createStore} from 'redux';
 import thunk from 'redux-thunk';
 import firebase from "firebase";
-import RootReducer from '../store/reducers/rootReducer';
+import RootReducer from './reducers/rootReducer';
+import {loadState} from "./localStorage";
 // import { reactReduxFirebase } from 'react-redux-firebase';
 // import { reduxFirestore } from 'redux-firestore';
 
@@ -36,10 +37,11 @@ firestore.settings(config);
 // const rootReducer = combineReducers({
 //   cart: CartReducer
 // })
-
+const persistedState = loadState();
 
 const store = createStore(
   RootReducer,
+  persistedState,
   compose(
     applyMiddleware(thunk),
     // reactReduxFirebase(firebase, config),
@@ -47,5 +49,4 @@ const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 )
-
 export default store;

@@ -5,8 +5,8 @@ import Input from '../../../atoms/input/Input';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { createGroup } from '../../../store/actions/groupActions'
-import { getUsersFromDatabase } from '../../../store/actions/userActions'
+import { createGroup } from '../../../core/store/actions/groupActions'
+import { getUsersFromDatabase } from '../../../core/store/actions/userActions'
 import CheckboxListSecondary from '../../../components/list/list'
 // import "./Game.css";
 import SnackBar from '../../../components/snackbar/Snackbar'

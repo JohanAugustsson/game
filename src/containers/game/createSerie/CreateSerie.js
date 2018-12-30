@@ -3,9 +3,9 @@ import {connect} from 'react-redux'
 import Button from '../../../atoms/buttons/buttons';
 import Input from '../../../atoms/input/Input';
 import Select from '../../../atoms/select/Select';
-import {createSerie} from '../../../store/actions/SerieActions'
-import {getUsersFromDatabase} from '../../../store/actions/userActions'
-import {getGroups} from '../../../store/actions/groupActions'
+import {createSerie} from '../../../core/store/actions/SerieActions'
+import {getUsersFromDatabase} from '../../../core/store/actions/userActions'
+import {getGroups} from '../../../core/store/actions/groupActions'
 import CheckboxListSecondary from '../../../components/list/list'
 
 // import "./Game.css";

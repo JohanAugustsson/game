@@ -8,7 +8,7 @@ import Input from '../../../atoms/input/Input';
 import Select from '../../../atoms/select/Select';
 import List from '../../../atoms/list/List';
 import SnackBar from '../../../components/snackbar/Snackbar'
-import { getSeries  } from '../../../store/actions/SerieActions'
+import { getSeries  } from '../../../core/store/actions/SerieActions'
 import './PlayView.css';
 
 

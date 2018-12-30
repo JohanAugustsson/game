@@ -6,10 +6,10 @@ import Select from '../../../atoms/select/Select';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { createSerie, getSeries  } from '../../../store/actions/SerieActions'
-import { getUsersFromDatabase } from '../../../store/actions/userActions'
-import { getGroups } from '../../../store/actions/groupActions'
-import { createNewGame } from '../../../store/actions/gameActions'
+import { createSerie, getSeries  } from '../../../core/store/actions/SerieActions'
+import { getUsersFromDatabase } from '../../../core/store/actions/userActions'
+import { getGroups } from '../../../core/store/actions/groupActions'
+import { createNewGame } from '../../../core/store/actions/gameActions'
 import CheckboxListSecondary from '../../../components/list/list'
 // import "./Game.css";
 import SnackBar from '../../../components/snackbar/Snackbar'
