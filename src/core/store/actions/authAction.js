@@ -1,7 +1,6 @@
 import firebase from "firebase";
 import {LOGIN, LOGOUT} from '../reducers/authReducer';
-import {saveState} from "../localStorage";
-import store from "../store";
+import {clearStateFromLocalStorage} from "../localStorage";
 
 const loginUser = (payload) => ({
     type: LOGIN,
@@ -67,10 +66,6 @@ const login = (email, password) => async (dispatch) => {
     return firebase.auth()
         .signInWithEmailAndPassword(email, password)
         .then(res => {
-            console.log(res);
-            saveState({
-                auth: res
-            });
             dispatch(loginUser(res));
         })
         .catch(error => {
@@ -78,6 +73,7 @@ const login = (email, password) => async (dispatch) => {
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(error);
+            clearStateFromLocalStorage();
             dispatch(logoutUser())
             // ...
         });
@@ -88,9 +84,11 @@ const logout = () => async (dispatch) => {
     return firebase.auth()
         .signOut()
         .then(() => {
+            clearStateFromLocalStorage()
             dispatch(logout());
         })
         .catch(() => {
+            clearStateFromLocalStorage()
             dispatch(logout())
         });
 };

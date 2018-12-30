@@ -1,4 +1,4 @@
-export const loadState = () => {
+export const loadStateFromLocalStorage = () => {
     try {
         const serializedState = localStorage.getItem('state');
         if (serializedState === null) {
@@ -18,7 +18,7 @@ export const loadState = () => {
     }
 };
 
-export const saveState = (state) => {
+export const saveStateToLocalStorage = (state) => {
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('state', serializedState);
@@ -28,19 +28,11 @@ export const saveState = (state) => {
     }
 };
 
-export const clearState = () => {
+export const clearStateFromLocalStorage = () => {
     try {
         localStorage.removeItem('state');
     } catch {
         // ignore write errors
         console.log("could not remove state from localstorage")
-    }
-};
-
-export const wait = (ms) => {
-    let start = new Date().getTime();
-    let end = start;
-    while (end < start + ms) {
-        end = new Date().getTime();
     }
 };
