@@ -12,6 +12,9 @@ const PublicRoute = ({
         const {from} = props.location.state || {from: {pathname: '/create-game'}};
         if (isAuthenticated) {
             if (props.location.pathname === '/login') {
+                if (from.pathname === '/login') {
+                    from.pathname = '/create-game'
+                }
                 return (
                     <Redirect to={from}/>
                 )
