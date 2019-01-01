@@ -1,0 +1,15 @@
+.container-serieview {
+  width: 100%;
+}
+.container-serieview {
+  width: 100%;
+}
+.container-serieview .wrapper-headrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container-serieview .wrapper-headrow Input{
+  max-width: 300px;
+  max-height: 40px;
+}

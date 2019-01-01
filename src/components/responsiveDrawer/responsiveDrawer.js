@@ -100,29 +100,29 @@ class ResponsiveDrawer extends React.Component {
                         </ListItemIcon>
                         <ListItemText primary={"New Game"}/>
                     </ListItem>
-                    <ListItem button key={5} component={Link} to="/create-serie">
-                        <ListItemIcon>
-                            <InboxIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary={"New Serie"}/>
-                    </ListItem>
-                    <ListItem button key={2} component={Link} to="/create-group">
-                        <ListItemIcon>
-                            <InboxIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary={"New Group"}/>
-                    </ListItem>
                     <ListItem button key={4} component={Link} to="/game/">
                         <ListItemIcon>
                             <InboxIcon/>
                         </ListItemIcon>
                         <ListItemText primary={"game score example"}/>
                     </ListItem>
-                    <ListItem button key={6} component={Link} to="/play">
+                    <ListItem button key={6} component={Link} to="/group">
+                    <ListItemIcon>
+                    <InboxIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Groups"}/>
+                    </ListItem>
+                    <ListItem button key={7} component={Link} to="/serie">
+                    <ListItemIcon>
+                    <InboxIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Series"}/>
+                    </ListItem>
+                    <ListItem button key={8} component={Link} to="/play">
                         <ListItemIcon>
                             <InboxIcon/>
                         </ListItemIcon>
-                        <ListItemText primary={"play"}/>
+                        <ListItemText primary={"Play"}/>
                     </ListItem>
                 </List>
             </div>

@@ -1,26 +1,22 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import moment from 'moment';
-// import Button from '../../../atoms/buttons/buttons';
+import Button from '../../../atoms/buttons/buttons';
 import Input from '../../../atoms/input/Input';
 import List from '../../../atoms/list/List';
-//import SnackBar from '../../../components/snackbar/Snackbar'
+import SnackBar from '../../../components/snackbar/Snackbar'
 import { getGroups } from '../../../core/store/actions/groupActions'
-import { getSeries  } from '../../../core/store/actions/SerieActions'
+// import { getSeries  } from '../../../core/store/actions/SerieActions'
 import { getUsers } from '../../../core/store/actions/userActions'
-import './PlayView.css';
+import './GroupView.css';
 
 
 const labelList = {
-  headers: ['Title','Group','Created by','Date','SerieId'],
+  headers: ['Group','Created by','Date', 'Edit'],
   tabelKeys: [
     {
       type: 'text',
       value: 'title'
-    },
-    {
-      type: 'text',
-      value: 'groupTitle'
     },
     {
       type: 'text',
@@ -37,7 +33,7 @@ const labelList = {
   ]
 }
 
-class PlayView extends Component {
+class GroupView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,9 +51,9 @@ class PlayView extends Component {
         if (!groupsIsFetched) {
             dispatch(getGroups(user.uid));
         }
-        if (!seriesIsFetched) {
-            dispatch(getSeries(user.uid));
-        }
+        // if (!seriesIsFetched) {
+        //     dispatch(getSeries(user.uid));
+        // }
 
 
     }
@@ -71,30 +67,30 @@ class PlayView extends Component {
 
 
 
-    goTo = (serieId) => {
-        const { history } = this.props;
-        history.push(`play/${serieId}`)
+    goTo = () => {
+        const {dispatch, history } = this.props;
+        const newData = {...this.state.formField};
+        console.log(history);
+        history.push('/group/create');
     };
 
     handleList = (e) =>{
       console.log('funkar ', e);
-      console.log(e.rowData.id);
-      this.goTo(e.rowData.id)
     }
 
     generateTableData = () => {
-      const { users, series, groups } = this.props;
-      if (!users || !series || !groups) return {};
+      const { users, groups } = this.props;
+      if (!users || !groups) return {};
       const newTableObj = {}
 
-      Object.keys(series).map(serieKey=>{
-        const serie = series[serieKey];
-        newTableObj[serieKey] = {...serie};
-        newTableObj[serieKey].groupTitle = groups[serie.groupId] && groups[serie.groupId].title || 'missing';
-        newTableObj[serieKey].createdByName = users[serie.createdBy] && users[serie.createdBy].firstName && users[serie.createdBy].lastName && users[serie.createdBy].firstName + ' '+ users[serie.createdBy].lastName   || 'missing';
-        newTableObj[serieKey].btn = 'Select'
-        newTableObj[serieKey].date = moment(serie.createdAt.toDate()).format('YYYY-MM-DD HH:MM');
+      Object.keys(groups).map(groupKey=>{
+        const group = groups[groupKey];
+        newTableObj[groupKey] = {...group};
+        newTableObj[groupKey].createdByName = users[group.createdBy] && users[group.createdBy].firstName && users[group.createdBy].lastName && users[group.createdBy].firstName + ' '+ users[group.createdBy].lastName   || 'missing';
+        newTableObj[groupKey].btn = 'Select'
+        newTableObj[groupKey].date = moment(group.createdAt.toDate()).format('YYYY-MM-DD HH:MM');
       })
+      console.log(newTableObj);
       return newTableObj;
     }
 
@@ -106,7 +102,7 @@ class PlayView extends Component {
         return (
             <div className={'container-groupview'}>
                 <div className={'sheet'}>
-                  <h4>PLAY GAME</h4>
+                  <h4>GROUPS</h4>
                   <div className='wrapper-headrow'>
                     <Input
                       label='Search'
@@ -115,6 +111,7 @@ class PlayView extends Component {
                       onChange={this.handleChange}
                       error={error.search}
                     />
+                    <Button onClick={this.goTo}>Create new group</Button>
                   </div>
                   <List
                     data={tableData}
@@ -131,10 +128,10 @@ const mapStateToProps = (store) => ({
     user: store.auth.data.user,
     users: store.users.data,
     usersIsFetched: store.users.isFetched,
-    series: store.series.data,
-    seriesIsFetched: store.series.isFetched,
+    // series: store.series.data,
+    // seriesIsFetched: store.series.isFetched,
     groups: store.groups.data,
     groupsIsFetched: store.groups.isFetched
 });
 
-export default connect(mapStateToProps)(PlayView)
+export default connect(mapStateToProps)(GroupView)

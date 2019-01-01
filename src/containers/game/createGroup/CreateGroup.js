@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import Button from '../../../atoms/buttons/buttons';
 import Input from '../../../atoms/input/Input';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import { createGroup } from '../../../core/store/actions/groupActions'
 import { getUsers } from '../../../core/store/actions/userActions'
 import CheckboxListSecondary from '../../../components/list/list'

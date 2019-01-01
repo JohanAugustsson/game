@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import SnackbarContent from '@material-ui/core/SnackbarContent';

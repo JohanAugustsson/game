@@ -29,8 +29,8 @@ const createNewUser = (data) => async (dispatch) => {
         .catch(function (error) {
             console.log('något gick fel', error);
             // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            // var errorCode = error.code;
+            // var errorMessage = error.message;
 
         });
 };

@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import moment from 'moment';
-// import Button from '../../../atoms/buttons/buttons';
+import Button from '../../../atoms/buttons/buttons';
 import Input from '../../../atoms/input/Input';
 import List from '../../../atoms/list/List';
-//import SnackBar from '../../../components/snackbar/Snackbar'
+import SnackBar from '../../../components/snackbar/Snackbar'
 import { getGroups } from '../../../core/store/actions/groupActions'
 import { getSeries  } from '../../../core/store/actions/SerieActions'
 import { getUsers } from '../../../core/store/actions/userActions'
-import './PlayView.css';
+import './SerieView.css';
 
 
 const labelList = {
@@ -37,7 +37,7 @@ const labelList = {
   ]
 }
 
-class PlayView extends Component {
+class SerieView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -71,15 +71,15 @@ class PlayView extends Component {
 
 
 
-    goTo = (serieId) => {
+    goTo = () => {
         const { history } = this.props;
-        history.push(`play/${serieId}`)
+        history.push('/serie/create')
+        const newData = {...this.state.formField};
+        // dispatch(createNewGame(newData));
     };
 
     handleList = (e) =>{
       console.log('funkar ', e);
-      console.log(e.rowData.id);
-      this.goTo(e.rowData.id)
     }
 
     generateTableData = () => {
@@ -104,18 +104,19 @@ class PlayView extends Component {
         const tableData = this.generateTableData();
 
         return (
-            <div className={'container-groupview'}>
+            <div className={'container-serieview'}>
                 <div className={'sheet'}>
-                  <h4>PLAY GAME</h4>
-                  <div className='wrapper-headrow'>
-                    <Input
-                      label='Search'
-                      formkey='search'
-                      value={formField.search}
-                      onChange={this.handleChange}
-                      error={error.search}
-                    />
-                  </div>
+                <h4>SERIES</h4>
+                <div className='wrapper-headrow'>
+                  <Input
+                    label='Search'
+                    formkey='search'
+                    value={formField.search}
+                    onChange={this.handleChange}
+                    error={error.search}
+                  />
+                  <Button onClick={this.goTo}>Create new serie</Button>
+                </div>
                   <List
                     data={tableData}
                     dataselect={labelList}
@@ -137,4 +138,4 @@ const mapStateToProps = (store) => ({
     groupsIsFetched: store.groups.isFetched
 });
 
-export default connect(mapStateToProps)(PlayView)
+export default connect(mapStateToProps)(SerieView)

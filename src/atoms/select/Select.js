@@ -1,4 +1,4 @@
-import React,{ Fragment} from 'react';
+import React from 'react';
 import './Select.css';
 
 // data : object with data that we are going to select from
@@ -8,7 +8,7 @@ import './Select.css';
 
 
 function Select (props) {
-  const { data, dataselect, value } = props;
+  const { data, dataselect } = props;
   const optionList = Object.keys(data).map((itemKey)=>{
     const item = {
       value: data[itemKey][dataselect.selectValue],

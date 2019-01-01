@@ -23,7 +23,7 @@ class CreateSerie extends Component {
             error: {},
         };
 
-        const {game, usersIsFetched, groupsIsFetched, dispatch, user} = props;
+        const { usersIsFetched, groupsIsFetched, dispatch, user} = props;
         // if ( !game.isFetched ){
         //    dispatch(getGamesFromDatabase());
         // }

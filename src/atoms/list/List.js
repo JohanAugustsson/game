@@ -1,4 +1,4 @@
-import React,{ Fragment} from 'react';
+import React from 'react';
 import './List.css';
 
 // read example at the end
@@ -28,7 +28,7 @@ function List (props) {
           </div>
         )
       // if plain text
-      return <div className='item' key={index}>{row[item.value]}</div>
+      return <div className='item' key={index + '-' + rowData}>{row[item.value]}</div>
     })
 
     return (
