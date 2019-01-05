@@ -15,7 +15,7 @@ import SerieView from './containers/serie/serieView/SerieView';
 const Router = () => (
     <Switch>
         <PrivateRoute exact path='/' component={Login}/>
-        <PrivateRoute exact path='/game/:id' component={GameScore}/>
+        <PrivateRoute exact path='/play/serie/:serieId/game/:gameId' component={GameScore}/>
         <PrivateRoute exact path='/create-game' component={CreateGame}/>
         <PrivateRoute exact path='/group/create' component={CreateGroup}/>
         <PrivateRoute exact path='/serie/create' component={CreateSerie}/>

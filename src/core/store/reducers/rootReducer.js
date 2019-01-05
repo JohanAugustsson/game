@@ -9,6 +9,7 @@ import GroupReducer from "./GroupReducer";
 import GroupPlayerReducer from "./GroupPlayerReducer";
 import SerieReducer from "./SerieReducer";
 import SnackbarReducer from "./SnackbarReducer";
+import SeriePlayerReducer from "./seriePlayerReducer";
 
 const RootReducer = combineReducers({
     auth: AuthReducer,
@@ -19,7 +20,8 @@ const RootReducer = combineReducers({
     gamePlayer: GamePlayerReducer,
     groups: GroupReducer,
     groupPlayer: GroupPlayerReducer,
-    series:SerieReducer,
+    series: SerieReducer,
+    seriePlayer: SeriePlayerReducer,
     snackbar: SnackbarReducer,
 });
 

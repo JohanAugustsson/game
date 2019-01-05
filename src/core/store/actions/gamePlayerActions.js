@@ -1,10 +1,19 @@
 import firebase from "firebase";
-import {GAMEPLAYER_ADD_PLAYER, GAMEPLAYER_ADD_PLAYERS} from "../reducers/GamePlayerReducer";
+import {
+    GAMEPLAYER_ADD_PLAYER,
+    GAMEPLAYER_ADD_UPDATE_PLAYERS,
+    GAMEPLAYER_INIT_PLAYERS
+} from "../reducers/GamePlayerReducer";
 
 const COLLECTION_NAME = "gamePlayers";
 
-const addPlayers = (payload) => ({
-    type: GAMEPLAYER_ADD_PLAYERS,
+const initPlayers = (payload) => ({
+    type: GAMEPLAYER_INIT_PLAYERS,
+    payload
+});
+
+const addUpdatePlayers = (payload) => ({
+    type: GAMEPLAYER_ADD_UPDATE_PLAYERS,
     payload
 });
 
@@ -24,9 +33,36 @@ const addPlayerToGame = (user) => async (dispatch) => {
         });
 };
 
+const createOrUpdatePlayer = ({game, player}) => async (dispatch) => {
+    const docRef = firebase.firestore().collection(COLLECTION_NAME);
+    docRef.where("serieId", "==", game.serieId)
+        .where("gameId", "==", game.id)
+        .where("userUid", "==", player.uid)
+        .get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                docRef.doc(querySnapshot.docs[0].id).update({team: player.team}).then(res => {
+                    dispatch(addUpdatePlayers(res))
+                })
+            } else {
+                let createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                let playerToStore = {
+                    userUid: player.uid, createdAt, groupId: game.groupId,
+                    serieId: game.serieId, gameId: game.id, team: player.team
+                };
+                playerToStore.uid = docRef.doc().id;
+
+                docRef.doc().set(playerToStore).then(res => {
+                    dispatch(addUpdatePlayers(res))
+                })
+            }
+        });
+
+};
+
 const getGamePlayersFromDB = (gameId) => async (dispatch) => {
     return getGamePlayersFromFirestore(gameId).then((actions) => {
-        dispatch((addPlayers(actions)));
+        dispatch((initPlayers(actions)));
     });
 };
 
@@ -46,36 +82,27 @@ function getGamePlayersFromFirestore(gameId) {
 }
 
 let unsubscribe = false;
-const listenAtGamePlayer = (game) => async (dispatch) => {
+const listenAtGamePlayer = (gameId) => async (dispatch) => {
 
-    // tar bort eventuellt tidigare lyssnare innann vi fortsätter
     if (unsubscribe) {
         unsubscribe();
     }
-
-    // Den fångar även upp alla tidigare händelser och returnerar detta
-    // när man lägger till en händelse kommer den att dyka upp 2ggr för närvarnde..
-    // beror på att serverTimestamp sätts efter att dokumentet skapats i databasen.
     return unsubscribe = firebase.firestore()
         .collection(COLLECTION_NAME)
-        .where("gameId", "==", game.id)
+        .where("gameId", "==", gameId)
         .onSnapshot(function (snapshot) {
+            let addedGamePlayers = {};
             snapshot.docChanges().forEach(function (change) {
-                console.log('nu har något hänt');
-                if (change.type === "added") {
-                    console.log("New log added: ", change.doc.data());
-                }
-                if (change.type === "modified") {
-                    console.log("log modified: ", change.doc.data());
-                }
-                if (change.type === "removed") {
-                    console.log("log removed: ", change.doc.data());
+                let changedGamePlayer = change.doc.data();
+                if (change.type === "added" || change.type === "modified") {
+                    addedGamePlayers = Object.assign({}, addedGamePlayers, {[changedGamePlayer.uid]: changedGamePlayer});
                 }
             });
+            dispatch(addUpdatePlayers(addedGamePlayers));
         });
 };
 
-const removeListener = () => async () => {
+const removeGamePlayerListener = () => {
     console.log('ta bort listener för: ' + COLLECTION_NAME);
     if (unsubscribe) {
         return unsubscribe();
@@ -83,4 +110,11 @@ const removeListener = () => async () => {
     return null;
 };
 
-export {getGamePlayersFromDB, addPlayer, addPlayers, listenAtGamePlayer};
+export {
+    getGamePlayersFromDB,
+    addPlayer,
+    addUpdatePlayers,
+    listenAtGamePlayer,
+    removeGamePlayerListener,
+    createOrUpdatePlayer
+};
