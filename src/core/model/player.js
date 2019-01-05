@@ -21,4 +21,8 @@ export class Player {
     isHome() {
         return this.team === 'Home';
     }
+
+    isAway() {
+        return this.team === 'Away';
+    }
 }
