@@ -1,9 +1,9 @@
-.playeraddsub-gridcenter {
+.playerselectteam-gridcenter {
     display: flex;
     justify-content: center;
 }
 
-.playeraddsub-compact {
+.playerselectteam-compact {
     padding: 0 !important;
     margin: 0 !important;
 }

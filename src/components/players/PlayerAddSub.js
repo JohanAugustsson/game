@@ -12,10 +12,10 @@ function PlayerAddSub({player, onAdd, onSubstract}) {
     return (
         <Grid item xs container direction={"row"}
               alignItems={"center"} justify={"center"}>
-            <Grid item xs={1} sm={2} className={"playeraddsub-gridcenter"}>
+            <Grid item xs={2} sm={2} className={"playeraddsub-gridcenter"}>
                 <PermIdentity/>
             </Grid>
-            <Grid item xs={8} sm={6}>
+            <Grid item xs={6} sm={6}>
                 <span>{player.firstName}</span>
             </Grid>
             <Grid item xs={1} sm={1} className={"playeraddsub-gridcenter"}>
@@ -24,7 +24,7 @@ function PlayerAddSub({player, onAdd, onSubstract}) {
                     <RemoveIcon/>
                 </IconButton>
             </Grid>
-            <Grid item xs={1} sm={2} className={"playeraddsub-gridcenter"}>
+            <Grid item xs={2} sm={2} className={"playeraddsub-gridcenter"}>
                 <Typography variant={"subtitle1"}
                             align={"center"}
                             className={"playeraddsub-gridcenter"}> {player.value}</Typography>
