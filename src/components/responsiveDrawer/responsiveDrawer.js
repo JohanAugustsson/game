@@ -27,20 +27,20 @@ const styles = theme => ({
         flexGrow: 1,
     },
     drawer: {
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
     },
     appBar: {
         marginLeft: drawerWidth,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: `calc(100% - ${drawerWidth}px)`,
         },
     },
     menuButton: {
         marginRight: 20,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             display: 'none',
         },
     },
@@ -88,7 +88,8 @@ class ResponsiveDrawer extends React.Component {
                 </div>
                 <Divider/>
                 <List>
-                    <ListItem button key={3} component={Link} to="/game/SV1ms2SzPurl4qbLvipv">
+                    <ListItem button key={3} component={Link}
+                              to="/play/serie/83Z7fpoeub7xnXduHKHl/game/8IpK4RDGyMHmNxgoCYUh">
                         <ListItemIcon>
                             <InboxIcon/>
                         </ListItemIcon>
@@ -107,16 +108,16 @@ class ResponsiveDrawer extends React.Component {
                         <ListItemText primary={"game score example"}/>
                     </ListItem>
                     <ListItem button key={6} component={Link} to="/group">
-                    <ListItemIcon>
-                    <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Groups"}/>
+                        <ListItemIcon>
+                            <InboxIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Groups"}/>
                     </ListItem>
                     <ListItem button key={7} component={Link} to="/serie">
-                    <ListItemIcon>
-                    <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Series"}/>
+                        <ListItemIcon>
+                            <InboxIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Series"}/>
                     </ListItem>
                     <ListItem button key={8} component={Link} to="/play">
                         <ListItemIcon>
@@ -146,7 +147,7 @@ class ResponsiveDrawer extends React.Component {
                 </AppBar>
                 <nav className={classes.drawer}>
                     {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                    <Hidden smUp implementation="css">
+                    <Hidden mdUp implementation="css">
                         <Drawer container={this.props.container} variant="temporary"
                                 anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                                 open={this.state.mobileOpen} onClose={this.handleDrawerToggle}
@@ -154,7 +155,7 @@ class ResponsiveDrawer extends React.Component {
                             {drawer}
                         </Drawer>
                     </Hidden>
-                    <Hidden xsDown implementation="css">
+                    <Hidden smDown implementation="css">
                         <Drawer classes={{paper: classes.drawerPaper}} variant="permanent" open>
                             {drawer}
                         </Drawer>
