@@ -178,7 +178,8 @@ const createNewGame = (game) => async (dispatch) => {
             //return dispatch(addGame(game));
             return null;
         }).then(() => {
-            return dispatch(snackbarMsg('Success'));
+            dispatch(snackbarMsg('Success'));
+            return (game);
         })
         .catch(() => {
             return dispatch(snackbarError('Sorry something went wrong'))
@@ -189,6 +190,8 @@ const createNewGame = (game) => async (dispatch) => {
 const addGamePlayers = (game) => {
     const promises = [];
     const {createdAt, id, groupId, serieId} = game;
+    if (!game.playersHome || !game.playersAway) return Promise.resolve([]);
+
     game.playersHome.forEach(uid => {
         promises.push(createPlayer({userUid: uid, createdAt, groupId, serieId, gameId: id, team: 'Home'}))
     })

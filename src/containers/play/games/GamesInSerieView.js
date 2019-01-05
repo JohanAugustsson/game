@@ -4,11 +4,12 @@ import moment from 'moment';
 // import Button from '../../../atoms/buttons/buttons';
 import Input from '../../../atoms/input/Input';
 import List from '../../../atoms/list/List';
+import Button from '../../../atoms/buttons/buttons';
 //import SnackBar from '../../../components/snackbar/Snackbar'
 import { getGroups } from '../../../core/store/actions/groupActions'
 import { getSeries  } from '../../../core/store/actions/SerieActions'
 import { getUsers } from '../../../core/store/actions/userActions'
-import { getGames  } from '../../../core/store/actions/gameActions'
+import { getGames, createNewGame } from '../../../core/store/actions/gameActions'
 import './GamesInSerieView.css';
 
 
@@ -77,7 +78,7 @@ class GamesInSerieView extends Component {
         console.log(gameId);
         const { history } = this.props;
         const { serieId } = this.state;
-        history.push(`/serie/${serieId}/game/${gameId}`)
+        history.push(`/play/serie/${serieId}/game/${gameId}`)
     };
 
     handleList = (e) =>{
@@ -104,6 +105,20 @@ class GamesInSerieView extends Component {
       return newTableObj;
     }
 
+    handleCreateNewGame = () => {
+      const {dispatch, series } = this.props;
+      const { serieId } = this.state;
+      const selectedSerie = series[serieId];
+      const newGame = {};
+      newGame.serieId = selectedSerie.id;
+      newGame.groupId = selectedSerie.groupId;
+      newGame.title = new Date().getTime();
+      dispatch(createNewGame(newGame)).then((game)=>{
+        console.log(game);
+        this.goTo(game.id)
+      });
+    }
+
     render() {
         const { formField, error } = this.state;
         const { history } = this.props;
@@ -123,6 +138,7 @@ class GamesInSerieView extends Component {
                       onChange={this.handleChange}
                       error={error.search}
                     />
+                    <Button onClick={this.handleCreateNewGame}>Create new game</Button>
                   </div>
                   <List
                     data={tableData}
