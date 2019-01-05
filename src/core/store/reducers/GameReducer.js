@@ -27,4 +27,3 @@ const GameReducer = (state= initialState, {type, payload}) =>{
 }
 
 export default GameReducer;
-export { SET_GAMES, ADD_GAME, CLEAR };

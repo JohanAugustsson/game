@@ -1,7 +1,7 @@
 import firebase from "firebase";
-import {ADD_GAME, SET_GAMES} from '../reducers/GameReducer';
+// import { SET_GAMES } from '../reducers/GameReducer';
 import {snackbarError, snackbarMsg} from './SnackbarActions'
-import {SET_ALL_GAMES} from '../reducers/AllGamesReducer';
+import {SET_GAMES} from '../reducers/AllGamesReducer';
 
 //
 // const addUser = (payload) => ({
@@ -14,20 +14,17 @@ import {SET_ALL_GAMES} from '../reducers/AllGamesReducer';
 //     payload
 // });
 
-const setGame = (payload) => ({
+const setGames = (payload) => ({
     type: SET_GAMES,
     payload
 });
 
-const addGame = (payload) => ({
-    type: ADD_GAME,
-    payload
-});
+// const addGame = (payload) => ({
+//     type: ADD_GAME,
+//     payload
+// });
+//
 
-const setAllGames = (payload) => ({
-    type: SET_ALL_GAMES,
-    payload
-});
 //
 // const addUserToGame = (data) => async (dispatch) => {
 //     return addUserToGameInFirestore(data).then((users) => {
@@ -45,7 +42,7 @@ const setAllGames = (payload) => ({
 //     console.log('spara data', data);
 //     return addGameInFirestore(data)
 //         .then((game) => {
-//             dispatch(setGame(data));
+//             dispatch(setGames(data));
 //         }).catch((error) => {
 //             console.log('något gick fel:', error);
 //         });
@@ -59,9 +56,27 @@ const setAllGames = (payload) => ({
 // }
 //
 //
+
+const getGames = (serieId) => async (dispatch) => {
+    return firebase.firestore()
+        .collection('games')
+        .where('serieId', '==', serieId)
+        .get()
+        .then(function (querySnapshot) {
+            const games = {};
+            querySnapshot.forEach(function (doc) {
+                // doc.data() is never undefined for query doc snapshots
+                games[doc.id] = doc.data();
+            });
+            dispatch(setGames(games))
+            return Promise.resolve();
+        });
+}
+
+
 const getGamesFromDatabase = (data) => async (dispatch) => {
     return getGamesFromFirestore().then((games) => {
-        dispatch(setAllGames(games));
+        dispatch(setGames(games));
     });
 };
 
@@ -81,7 +96,7 @@ function getGamesFromFirestore(user) {
 
 const getGameFromDatabase = (gameId) => async (dispatch) => {
     return getGameFromFirestore(gameId).then((game) => {
-        dispatch(setGame(game));
+        dispatch(setGames(game));
     });
 };
 
@@ -159,7 +174,9 @@ const createNewGame = (game) => async (dispatch) => {
     delete game.playersAway;
     return docRef.set(game)
         .then(() => {
-            return dispatch(addGame(game));
+            // skapa nytt game
+            //return dispatch(addGame(game));
+            return null;
         }).then(() => {
             return dispatch(snackbarMsg('Success'));
         })
@@ -189,4 +206,4 @@ const createPlayer = (player) => {
 
 // ---------------------  END --------------------------------
 
-export {createNewGame, getGameFromDatabase, getGamesFromDatabase};
+export {createNewGame, getGameFromDatabase, getGamesFromDatabase, getGames};

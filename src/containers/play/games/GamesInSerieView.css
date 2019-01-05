@@ -1,0 +1,12 @@
+.container-groupview {
+  width: 100%;
+}
+.container-groupview .wrapper-headrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container-groupview .wrapper-headrow Input{
+  max-width: 300px;
+  max-height: 40px;
+}

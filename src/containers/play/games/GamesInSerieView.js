@@ -8,19 +8,16 @@ import List from '../../../atoms/list/List';
 import { getGroups } from '../../../core/store/actions/groupActions'
 import { getSeries  } from '../../../core/store/actions/SerieActions'
 import { getUsers } from '../../../core/store/actions/userActions'
-import './PlayView.css';
+import { getGames  } from '../../../core/store/actions/gameActions'
+import './GamesInSerieView.css';
 
 
 const labelList = {
-  headers: ['Title','Group','Created by','Date','SerieId'],
+  headers: ['Title','Created by','Date','gameId'],
   tabelKeys: [
     {
       type: 'text',
-      value: 'title'
-    },
-    {
-      type: 'text',
-      value: 'groupTitle'
+      value: 'gameTitle'
     },
     {
       type: 'text',
@@ -37,17 +34,19 @@ const labelList = {
   ]
 }
 
-class PlayView extends Component {
+class GamesInSerieView extends Component {
     constructor(props) {
         super(props);
+        const serieId = this.props.match.params.serieId;
         this.state = {
             formField: {
               search: '',
             },
+            serieId: serieId,
             error: {}
         }
 
-        const { dispatch, seriesIsFetched, usersIsFetched, groupsIsFetched, user } = props;
+        const { dispatch, seriesIsFetched, usersIsFetched, groupsIsFetched, gamesIsFetched, user } = props;
         if (!usersIsFetched) {
             dispatch(getUsers(user.uid));
         }
@@ -57,6 +56,9 @@ class PlayView extends Component {
         }
         if (!seriesIsFetched) {
             dispatch(getSeries(user.uid));
+        }
+        if (!gamesIsFetched) {
+            dispatch(getGames(serieId));
         }
 
 
@@ -71,9 +73,11 @@ class PlayView extends Component {
 
 
 
-    goTo = (serieId) => {
+    goTo = (gameId) => {
+        console.log(gameId);
         const { history } = this.props;
-        history.push(`play/serie/${serieId}`)
+        const { serieId } = this.state;
+        history.push(`/serie/${serieId}/game/${gameId}`)
     };
 
     handleList = (e) =>{
@@ -83,30 +87,34 @@ class PlayView extends Component {
     }
 
     generateTableData = () => {
-      const { users, series, groups } = this.props;
+      const { users, series, groups, games } = this.props;
       if (!users || !series || !groups) return {};
       const newTableObj = {}
-
-      Object.keys(series).map(serieKey=>{
+      console.log(games);
+      Object.keys(games).map(gameKey=>{
+        const game = games[gameKey];
+        const serieKey = game.serieId;
         const serie = series[serieKey];
-        newTableObj[serieKey] = {...serie};
-        newTableObj[serieKey].groupTitle = groups[serie.groupId] && groups[serie.groupId].title || 'missing';
-        newTableObj[serieKey].createdByName = users[serie.createdBy] && users[serie.createdBy].firstName && users[serie.createdBy].lastName && users[serie.createdBy].firstName + ' '+ users[serie.createdBy].lastName   || 'missing';
-        newTableObj[serieKey].btn = 'Select'
-        newTableObj[serieKey].date = moment(serie.createdAt.toDate()).format('YYYY-MM-DD HH:MM');
+        newTableObj[gameKey] = {...game};
+        newTableObj[gameKey].gameTitle = game.title || 'missing';
+        newTableObj[gameKey].createdByName = users[game.createdBy] && users[game.createdBy].firstName && users[game.createdBy].lastName && users[game.createdBy].firstName + ' '+ users[game.createdBy].lastName   || 'missing';
+        newTableObj[gameKey].btn = 'Select'
+        newTableObj[gameKey].date = moment(game.createdAt.toDate()).format('YYYY-MM-DD HH:MM');
       })
       return newTableObj;
     }
 
     render() {
         const { formField, error } = this.state;
+        const { history } = this.props;
+        console.log(history);
 
         const tableData = this.generateTableData();
 
         return (
             <div className={'container-groupview'}>
                 <div className={'sheet'}>
-                  <h4>PLAY GAME</h4>
+                  <h4>Games in current serie</h4>
                   <div className='wrapper-headrow'>
                     <Input
                       label='Search'
@@ -134,7 +142,9 @@ const mapStateToProps = (store) => ({
     series: store.series.data,
     seriesIsFetched: store.series.isFetched,
     groups: store.groups.data,
-    groupsIsFetched: store.groups.isFetched
+    groupsIsFetched: store.groups.isFetched,
+    games: store.games.data,
+    gamesIsFetched: store.games.isFetched,
 });
 
-export default connect(mapStateToProps)(PlayView)
+export default connect(mapStateToProps)(GamesInSerieView)
