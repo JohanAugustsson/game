@@ -14,9 +14,12 @@ const addGameActivities = (payload) => ({
 });
 
 const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
+    console.log(player);
     let gameActivity = {};
     gameActivity.type = "SCORE";
     gameActivity.gameId = player.gameId;
+    gameActivity.serieId = player.serieId;
+    gameActivity.groupId = player.groupId;
     gameActivity.value = value;
     gameActivity.userUid = player.uid;
     gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();

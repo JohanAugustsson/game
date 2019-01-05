@@ -66,6 +66,7 @@ class GameScore extends Component {
 
     renderPlayer() {
         const {activities, game, gamePlayer, users} = this.props;
+        const currentGame = game[Object.keys(game)] || {};
         if (gamePlayer && game && activities && users) {
             return Object.keys(gamePlayer).map(player => {
                 let usr = gamePlayer[player];
@@ -75,30 +76,33 @@ class GameScore extends Component {
                     .map(activity => activities[activity].value)
                     .reduce((total, value) => total + value, 0);
 
-                return new Player(usr.userUid, users[usr.userUid].firstName, val, usr.gameId, usr.team)
+                return new Player(usr.userUid, users[usr.userUid].firstName, val, usr.gameId, usr.team, currentGame.groupId, currentGame.serieId )
             });
         }
         return [];
     }
 
     getAvailablePlayers() {
-        const {seriePlayer, gamePlayer, users} = this.props;
+        const {seriePlayer, gamePlayer, users, game } = this.props;
+        const currentGame = game[Object.keys(game)] || {};
+        console.log(currentGame);
         let temp = {};
         Object.keys(seriePlayer).map(player => {
             temp = this.getPlayerInstance(temp, seriePlayer[player].userUid,
-                users[seriePlayer[player].userUid].firstName, this.state.gameId, null);
+                users[seriePlayer[player].userUid].firstName, this.state.gameId, null, currentGame.groupId, currentGame.serieId );
         });
         Object.keys(gamePlayer).map(player => {
             let usr = gamePlayer[player];
-            temp = this.getPlayerInstance(temp, usr.userUid, users[usr.userUid].firstName, usr.gameId, usr.team);
+            temp = this.getPlayerInstance(temp, usr.userUid, users[usr.userUid].firstName, usr.gameId, usr.team, currentGame.groupId, currentGame.serieId);
         });
+        console.log(temp);
         return temp;
     }
 
-    getPlayerInstance(acc, playerUid, firstName, gameId, team) {
+    getPlayerInstance(acc, playerUid, firstName, gameId, team, groupId, serieId) {
         return Object.assign({}, acc, {
             [playerUid]:
-                new Player(playerUid, firstName, 0, gameId, team)
+                new Player(playerUid, firstName, 0, gameId, team, groupId, serieId)
         });
     }
 
