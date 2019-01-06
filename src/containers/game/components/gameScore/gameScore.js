@@ -39,22 +39,16 @@ class GameScore extends Component {
     }
 
     componentWillMount() {
-        const {userIsFetched, gamesIsFetched, gameIsFetched, seriePlayerIsFetched, dispatch} = this.props;
+        const {userIsFetched, seriePlayerIsFetched, dispatch} = this.props;
         if (!userIsFetched) {
             dispatch(getUsers());
         }
-        if (!gamesIsFetched) {
-            dispatch(getGames(this.props.match.params.serieId));
-        }
-        
-        // if (!gameIsFetched && game.Id !== this.state.gamId ) {
-            dispatch(getGame(this.state.gameId))
-        // }
 
         if (!seriePlayerIsFetched) {
             dispatch(getSeriePlayers(this.state.serieId));
         }
 
+        dispatch(getGame(this.state.gameId));
         dispatch(listenAtActivity(this.state.gameId));
         dispatch(listenAtGamePlayer(this.state.gameId));
     }
@@ -66,8 +60,7 @@ class GameScore extends Component {
 
     renderPlayer() {
         const {activities, game, gamePlayer, users} = this.props;
-        const currentGame = game[Object.keys(game)] || {};
-        if (gamePlayer && game && activities && users) {
+        if (gamePlayer && game.id && activities && users) {
             return Object.keys(gamePlayer).map(player => {
                 let usr = gamePlayer[player];
 
@@ -76,27 +69,28 @@ class GameScore extends Component {
                     .map(activity => activities[activity].value)
                     .reduce((total, value) => total + value, 0);
 
-                return new Player(usr.userUid, users[usr.userUid].firstName, val, usr.gameId, usr.team, currentGame.groupId, currentGame.serieId )
+                return new Player(usr.userUid, users[usr.userUid].firstName, val, game.id, usr.team, game.groupId, game.serieId)
             });
         }
         return [];
     }
 
     getAvailablePlayers() {
-        const {seriePlayer, gamePlayer, users, game } = this.props;
-        const currentGame = game[Object.keys(game)] || {};
-        console.log(currentGame);
-        let temp = {};
-        Object.keys(seriePlayer).map(player => {
-            temp = this.getPlayerInstance(temp, seriePlayer[player].userUid,
-                users[seriePlayer[player].userUid].firstName, this.state.gameId, null, currentGame.groupId, currentGame.serieId );
-        });
-        Object.keys(gamePlayer).map(player => {
-            let usr = gamePlayer[player];
-            temp = this.getPlayerInstance(temp, usr.userUid, users[usr.userUid].firstName, usr.gameId, usr.team, currentGame.groupId, currentGame.serieId);
-        });
-        console.log(temp);
-        return temp;
+        const {seriePlayer, gamePlayer, users, game} = this.props;
+        if (game.id) {
+            let temp = {};
+            Object.keys(seriePlayer).map(player => {
+                temp = this.getPlayerInstance(temp, seriePlayer[player].userUid,
+                    users[seriePlayer[player].userUid].firstName, this.state.gameId, null, game.groupId, game.serieId);
+            });
+            Object.keys(gamePlayer).map(player => {
+                let usr = gamePlayer[player];
+                temp = this.getPlayerInstance(temp, usr.userUid, users[usr.userUid].firstName, usr.gameId, usr.team, game.groupId, game.serieId);
+            });
+            return temp;
+        } else {
+            return {}
+        }
     }
 
     getPlayerInstance(acc, playerUid, firstName, gameId, team, groupId, serieId) {
@@ -124,8 +118,7 @@ class GameScore extends Component {
     onToggleChange = (team, player) => {
         const {dispatch, game} = this.props;
         player.team = team;
-        let flattenGame = game[Object.keys(game)[0]];
-        dispatch(createOrUpdatePlayer({game: flattenGame, player}))
+        dispatch(createOrUpdatePlayer({game: game, player}))
     };
 
 
@@ -266,8 +259,6 @@ class GameScore extends Component {
 const mapStateToProps = (state) => ({
     users: state.users.data,
     usersIsFetched: state.users.isFetched,
-    games: state.games.data,
-    gamesIsFetched: state.games.data.isFetched,
     game: state.game.data,
     gameIsFetched: state.game.isFetched,
     activities: state.gameActivities.data,
