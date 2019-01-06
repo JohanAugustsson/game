@@ -1,5 +1,7 @@
 import firebase from "firebase";
 import {GAME_ACTIVITY_ADD_ALL, GAME_ACTIVITY_ADD_SCORE} from "../reducers/GameActivityReducer";
+import moment from "moment";
+import {timeTempLocally} from "../../momentHelper";
 
 const COLLECTION_NAME = "gameActivity";
 
@@ -14,7 +16,6 @@ const addGameActivities = (payload) => ({
 });
 
 const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
-    console.log(player);
     let gameActivity = {};
     gameActivity.type = "SCORE";
     gameActivity.gameId = player.gameId;
@@ -22,12 +23,14 @@ const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
     gameActivity.groupId = player.groupId;
     gameActivity.value = value;
     gameActivity.userUid = player.uid;
+    gameActivity.team = player.team;
     gameActivity.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
     const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
     gameActivity.id = docRef.id;
     docRef.set(gameActivity).then(() => {
-        dispatch({type: "none"});
+        gameActivity.createdAt = timeTempLocally();
+        dispatch(addScoreActivity(gameActivity));
     }).catch((error) => {
         console.log('något gick fel:', error);
     });
@@ -63,6 +66,7 @@ const listenAtActivity = (gameId) => async (dispatch) => {
     return unsubscribe = firebase.firestore()
         .collection(COLLECTION_NAME)
         .where("gameId", "==", gameId)
+        .orderBy("createdAt", "desc")
         .onSnapshot(function (snapshot) {
             let addedActivities = {};
             snapshot.docChanges().forEach(function (change) {
@@ -72,6 +76,7 @@ const listenAtActivity = (gameId) => async (dispatch) => {
                     addedActivities = Object.assign({}, addedActivities, {[changedActivity.id]: changedActivity});
                 }
             });
+
             dispatch(addGameActivities(addedActivities));
         });
 };

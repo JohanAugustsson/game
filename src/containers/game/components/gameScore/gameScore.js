@@ -7,7 +7,7 @@ import {
 } from "../../../../core/store/actions/gameActivityActions";
 import {Player} from "../../../../core/model/player";
 import {getUsers} from "../../../../core/store/actions/userActions";
-import {getGame, getGames} from "../../../../core/store/actions/gameActions";
+import {getGame} from "../../../../core/store/actions/gameActions";
 import {
     createOrUpdatePlayer,
     listenAtGamePlayer,
@@ -25,6 +25,7 @@ import PlayerSelectTeam from "../../../../components/players/playerSelectTeam";
 import {getSeriePlayers} from "../../../../core/store/actions/seriePlayerActions";
 import connect from "react-redux/es/connect/connect";
 import Button from "@material-ui/core/es/Button";
+import {getDateFromTimestamp} from "../../../../core/momentHelper";
 
 
 class GameScore extends Component {
@@ -184,6 +185,61 @@ class GameScore extends Component {
         </Grid>;
     }
 
+    getActivityBoard() {
+        const {activities, users} = this.props;
+        return <Grid container>
+            <Grid item xs={12} sm={12}>
+                <Typography variant={"headline"}></Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <Paper className={"paper"}>
+                    <List>
+                        <ListSubheader>Activities in game</ListSubheader>
+                        <ListItem>
+                            <Grid item xs container direction={"row"}
+                                  alignItems={"center"} justify={"center"}>
+                                <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                                    <span>Type</span>
+                                </Grid>
+                                <Grid item xs={4} sm={4} className={"grid-flex-center"}>
+                                    <span>Name</span>
+                                </Grid>
+                                <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                                    Team
+                                </Grid>
+                                <Grid item xs={4} sm={4} className={"grid-flex-center"}>
+                                    Date
+                                </Grid>
+                            </Grid>
+                        </ListItem>
+                        {Object.keys(activities).map((activity, i) =>
+                            <div key={i}>
+                                <Divider/>
+                                <ListItem>
+                                    <Grid item xs container direction={"row"}
+                                          alignItems={"center"} justify={"center"}>
+                                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                                            <span>{activities[activity].type}</span>
+                                        </Grid>
+                                        <Grid item xs={4} sm={4} className={"grid-flex-center"}>
+                                            <span>{users[activities[activity].userUid].firstName}</span>
+                                        </Grid>
+                                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                                            <span>{activities[activity].team}</span>
+                                        </Grid>
+                                        <Grid item xs={4} sm={4} className={"grid-flex-center"}>
+                                            {getDateFromTimestamp(activities[activity].createdAt)}
+                                        </Grid>
+                                    </Grid>
+                                </ListItem>
+                            </div>
+                        )}
+                    </List>
+                </Paper>
+            </Grid>
+        </Grid>;
+    }
+
     getPlayerBoard(playersHome, playersAway) {
         return <Grid container>
             <Grid item xs={12} sm={6}>
@@ -227,15 +283,12 @@ class GameScore extends Component {
         let availablePlayers = this.getAvailablePlayers();
         let playersHome = plays.filter(player => player.isHome());
         let playersAway = plays.filter(player => player.isAway());
-        let scoreBoard;
-        let playerBoard;
-        let teamBoard;
-        if (this.state.step === 1) {
-            scoreBoard = this.getScoreBoard(playersHome, playersAway)
-            playerBoard = this.getPlayerBoard(playersHome, playersAway)
-        } else if (this.state.step === 0) {
-            teamBoard = this.getTeamBoard(availablePlayers)
-        }
+
+        let teamBoard = this.state.step === 0 ? this.getTeamBoard(availablePlayers) : '';
+
+        let scoreBoard = this.state.step === 1 ? this.getScoreBoard(playersHome, playersAway) : '';
+        let playerBoard = this.state.step === 1 ? this.getPlayerBoard(playersHome, playersAway) : '';
+        let activityBoard = this.state.step === 1 ? this.getActivityBoard() : '';
 
         return (
             <div className={"root"}>
@@ -250,6 +303,7 @@ class GameScore extends Component {
                 {scoreBoard}
                 {playerBoard}
                 {teamBoard}
+                {activityBoard}
             </div>
         )
     }
