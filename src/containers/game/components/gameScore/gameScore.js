@@ -7,7 +7,7 @@ import {
 } from "../../../../core/store/actions/gameActivityActions";
 import {Player} from "../../../../core/model/player";
 import {getUsers} from "../../../../core/store/actions/userActions";
-import {getGameFromDatabase, getGamesFromDatabase} from "../../../../core/store/actions/gameActions";
+import {getGame, getGames} from "../../../../core/store/actions/gameActions";
 import {
     createOrUpdatePlayer,
     listenAtGamePlayer,
@@ -44,12 +44,12 @@ class GameScore extends Component {
             dispatch(getUsers());
         }
         if (!gamesIsFetched) {
-            dispatch(getGamesFromDatabase());
+            dispatch(getGames(this.props.match.params.serieId));
         }
-
-        if (!gameIsFetched) {
-            dispatch(getGameFromDatabase(this.state.gameId))
-        }
+        
+        // if (!gameIsFetched && game.Id !== this.state.gamId ) {
+            dispatch(getGame(this.state.gameId))
+        // }
 
         if (!seriePlayerIsFetched) {
             dispatch(getSeriePlayers(this.state.serieId));

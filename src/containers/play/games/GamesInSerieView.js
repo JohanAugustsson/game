@@ -7,7 +7,7 @@ import List from '../../../atoms/list/List';
 import Button from '../../../atoms/buttons/buttons';
 //import SnackBar from '../../../components/snackbar/Snackbar'
 import { getGroups } from '../../../core/store/actions/groupActions'
-import { getSeries  } from '../../../core/store/actions/SerieActions'
+import { getSerie  } from '../../../core/store/actions/SerieActions'
 import { getUsers } from '../../../core/store/actions/userActions'
 import { getGames, createNewGame } from '../../../core/store/actions/gameActions'
 import './GamesInSerieView.css';
@@ -44,7 +44,8 @@ class GamesInSerieView extends Component {
               search: '',
             },
             serieId: serieId,
-            error: {}
+            error: {},
+            page: 1,
         }
 
         const { dispatch, seriesIsFetched, usersIsFetched, groupsIsFetched, gamesIsFetched, user } = props;
@@ -56,7 +57,7 @@ class GamesInSerieView extends Component {
             dispatch(getGroups(user.uid));
         }
         if (!seriesIsFetched) {
-            dispatch(getSeries(user.uid));
+            dispatch(getSerie(serieId));
         }
         if (!gamesIsFetched) {
             dispatch(getGames(serieId));
@@ -82,20 +83,15 @@ class GamesInSerieView extends Component {
     };
 
     handleList = (e) =>{
-      console.log('funkar ', e);
-      console.log(e.rowData.id);
       this.goTo(e.rowData.id)
     }
 
     generateTableData = () => {
-      const { users, series, groups, games } = this.props;
-      if (!users || !series || !groups) return {};
+      const { users, serie, groups, games } = this.props;
+      if (!users || !serie || !groups) return {};
       const newTableObj = {}
-      console.log(games);
       Object.keys(games).map(gameKey=>{
         const game = games[gameKey];
-        const serieKey = game.serieId;
-        const serie = series[serieKey];
         newTableObj[gameKey] = {...game};
         newTableObj[gameKey].gameTitle = game.title || 'missing';
         newTableObj[gameKey].createdByName = users[game.createdBy] && users[game.createdBy].firstName && users[game.createdBy].lastName && users[game.createdBy].firstName + ' '+ users[game.createdBy].lastName   || 'missing';
@@ -114,7 +110,6 @@ class GamesInSerieView extends Component {
       newGame.groupId = selectedSerie.groupId;
       newGame.title = new Date().getTime();
       dispatch(createNewGame(newGame)).then((game)=>{
-        console.log(game);
         this.goTo(game.id)
       });
     }
@@ -122,8 +117,6 @@ class GamesInSerieView extends Component {
     render() {
         const { formField, error } = this.state;
         const { history } = this.props;
-        console.log(history);
-
         const tableData = this.generateTableData();
 
         return (
@@ -155,8 +148,8 @@ const mapStateToProps = (store) => ({
     user: store.auth.data.user,
     users: store.users.data,
     usersIsFetched: store.users.isFetched,
-    series: store.series.data,
-    seriesIsFetched: store.series.isFetched,
+    serie: store.series.data,
+    serieIsFetched: store.series.isFetched,
     groups: store.groups.data,
     groupsIsFetched: store.groups.isFetched,
     games: store.games.data,

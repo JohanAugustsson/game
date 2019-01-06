@@ -1,6 +1,6 @@
-const SET_GAMES = 'SET_GAMES';
-const ADD_GAME = 'ADD_GAME';
-const CLEAR = "CLEAR";
+export const SET_GAME = 'SET_GAME';
+export const ADD_GAME = 'ADD_GAME';
+export const CLEAR = "CLEAR";
 
 const initialState = {
   isFetched: false,
@@ -11,7 +11,7 @@ const initialState = {
 const GameReducer = (state= initialState, {type, payload}) =>{
 
   switch (type) {
-    case SET_GAMES: {
+    case SET_GAME: {
       return {...state, data: payload, isFetched: true }
     }
     case ADD_GAME: {

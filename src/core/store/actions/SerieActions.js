@@ -1,5 +1,6 @@
 import firebase from "firebase";
-import {SET_SERIES} from "../reducers/SerieReducer";
+import { SET_SERIES } from "../reducers/SeriesReducer";
+import { SET_SERIE } from "../reducers/SerieReducer";
 import {snackbarError, snackbarMsg} from './SnackbarActions'
 
 
@@ -9,6 +10,11 @@ const seriesSet = (payload) => ({
     type: SET_SERIES,
     payload
 });
+const serieSet = (payload) => ({
+    type: SET_SERIE,
+    payload
+});
+
 const addNewSerie = (payload) => ({
     type: SET_SERIES,
     payload
@@ -60,7 +66,7 @@ const getSeries = (userUid) => async (dispatch) => {
 
         const promises = [];
         Object.keys(series).forEach(seriePlayerKey => {
-            promises.push(getSerie(series[seriePlayerKey].serieId));
+            promises.push(getOneSerie(series[seriePlayerKey].serieId));
         })
         return Promise.all(promises);
       }).then((seriesData)=>{
@@ -91,7 +97,7 @@ function getGroupsFromDb(userUid) {
 }
 
 // get groups from db by groupId = doucment id
-function getSerie(serieId) {
+function getOneSerie(serieId) {
   return firebase.firestore()
     .collection('series')
     .doc(serieId)
@@ -108,6 +114,11 @@ function getSerie(serieId) {
     })
 }
 
+const getSerie = (serieId) => (dispatch) => {
+  return getOneSerie(serieId).then((serie)=>{
+    dispatch(serieSet(serie));
+  })
+}
 
 
-export {createSerie, getSeries};
+export {createSerie, getSeries, getSerie};

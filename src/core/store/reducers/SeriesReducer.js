@@ -1,4 +1,4 @@
-const SET_SERIE = 'SET_SERIE';
+const SET_SERIES = 'SET_SERIES';
 const CLEAR = "CLEAR";
 // const REMOVE_GROUP = 'REMOVE_GROUP';
 
@@ -10,7 +10,7 @@ const initialState = {
 
 const SeriesReducer = (state= initialState, {type, payload}) =>{
   switch (type) {
-    case SET_SERIE: {
+    case SET_SERIES: {
       return {...state, data: payload, isFetched: true }
     }
     case CLEAR: {
@@ -23,4 +23,4 @@ const SeriesReducer = (state= initialState, {type, payload}) =>{
 }
 
 export default SeriesReducer;
-export { SET_SERIE };
+export { SET_SERIES };
