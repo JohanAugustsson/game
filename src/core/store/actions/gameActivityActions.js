@@ -1,7 +1,5 @@
 import firebase from "firebase";
 import {GAME_ACTIVITY_ADD_ALL, GAME_ACTIVITY_ADD_SCORE} from "../reducers/GameActivityReducer";
-import moment from "moment";
-import {timeTempLocally} from "../../momentHelper";
 
 const COLLECTION_NAME = "gameActivity";
 
@@ -29,10 +27,10 @@ const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
     const docRef = firebase.firestore().collection(COLLECTION_NAME).doc();
     gameActivity.id = docRef.id;
     docRef.set(gameActivity).then(() => {
-        gameActivity.createdAt = timeTempLocally();
+        gameActivity.createdAt = firebase.firestore.Timestamp.now();
         dispatch(addScoreActivity(gameActivity));
     }).catch((error) => {
-        console.log('något gick fel:', error);
+        console.log('addScoreActivityToGame error:', error);
     });
 };
 

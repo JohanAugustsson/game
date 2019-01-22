@@ -25,7 +25,7 @@ import PlayerSelectTeam from "../../../../components/players/playerSelectTeam";
 import {getSeriePlayers} from "../../../../core/store/actions/seriePlayerActions";
 import connect from "react-redux/es/connect/connect";
 import Button from "@material-ui/core/es/Button";
-import {getDateFromTimestamp} from "../../../../core/momentHelper";
+import {compareTimestamps, getDateFromTimestamp} from "../../../../core/momentHelper";
 
 
 class GameScore extends Component {
@@ -187,48 +187,56 @@ class GameScore extends Component {
 
     getActivityBoard() {
         const {activities, users} = this.props;
+        if (!activities) {
+            return;
+        }
+        let acts = Object.keys(activities).map(activity => activities[activity]).sort(compareTimestamps);
         return <Grid container>
             <Grid item xs={12} sm={12}>
                 <Typography variant={"headline"}></Typography>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
                 <Paper className={"paper"}>
-                    <List>
-                        <ListSubheader>Activities in game</ListSubheader>
-                        <ListItem>
-                            <Grid item xs container direction={"row"}
-                                  alignItems={"center"} justify={"center"}>
-                                <Grid item xs={2} sm={2} className={"grid-flex-center"}>
-                                    <span>Type</span>
-                                </Grid>
-                                <Grid item xs={4} sm={4} className={"grid-flex-center"}>
-                                    <span>Name</span>
-                                </Grid>
-                                <Grid item xs={2} sm={2} className={"grid-flex-center"}>
-                                    Team
-                                </Grid>
-                                <Grid item xs={4} sm={4} className={"grid-flex-center"}>
-                                    Date
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                        {Object.keys(activities).map((activity, i) =>
+                    <Typography>Activities in game</Typography>
+                    <Grid item xs container direction={"row"}>
+                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                            <span>Name</span>
+                        </Grid>
+                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                            <span>Value</span>
+                        </Grid>
+                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                            Team
+                        </Grid>
+                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                            <span>Type</span>
+                        </Grid>
+                        <Grid item xs={4} sm={4} className={"grid-flex-center"}>
+                            Date
+                        </Grid>
+                    </Grid>
+                    <List style={{maxHeight: 300, overflow: 'auto'}}>
+                        {acts.map((activity, i) =>
                             <div key={i}>
                                 <Divider/>
                                 <ListItem>
-                                    <Grid item xs container direction={"row"}
-                                          alignItems={"center"} justify={"center"}>
-                                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
-                                            <span>{activities[activity].type}</span>
-                                        </Grid>
-                                        <Grid item xs={4} sm={4} className={"grid-flex-center"}>
-                                            <span>{users[activities[activity].userUid].firstName}</span>
+                                    <Grid item xs container direction={"row"}>
+                                        <Grid style={{textAlign: 'left'}} item xs={2} sm={2}
+                                              className={"grid-flex-center"}>
+                                            <span>{users[activity.userUid].firstName}</span>
                                         </Grid>
                                         <Grid item xs={2} sm={2} className={"grid-flex-center"}>
-                                            <span>{activities[activity].team}</span>
+                                            <span>{activity.value}</span>
                                         </Grid>
-                                        <Grid item xs={4} sm={4} className={"grid-flex-center"}>
-                                            {getDateFromTimestamp(activities[activity].createdAt)}
+                                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                                            <span>{activity.team}</span>
+                                        </Grid>
+                                        <Grid item xs={2} sm={2} className={"grid-flex-center"}>
+                                            <span>{activity.type}</span>
+                                        </Grid>
+                                        <Grid style={{textAlign: 'right'}} item xs={4} sm={4}
+                                              className={"grid-flex-center"}>
+                                            {getDateFromTimestamp(activity.createdAt)}
                                         </Grid>
                                     </Grid>
                                 </ListItem>

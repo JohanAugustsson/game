@@ -4,7 +4,6 @@ import {
     GAMEPLAYER_ADD_UPDATE_PLAYERS,
     GAMEPLAYER_INIT_PLAYERS
 } from "../reducers/GamePlayerReducer";
-import {timeTempLocally} from "../../momentHelper";
 
 const COLLECTION_NAME = "gamePlayers";
 
@@ -54,7 +53,7 @@ const createOrUpdatePlayer = ({game, player}) => async (dispatch) => {
                 playerToStore.uid = docRef.doc().id;
 
                 docRef.doc().set(playerToStore).then(() => {
-                    playerToStore.createdAt = timeTempLocally();
+                    playerToStore.createdAt = firebase.firestore.Timestamp.now();
                     dispatch(addUpdatePlayers(playerToStore))
                 })
             }
