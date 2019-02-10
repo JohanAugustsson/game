@@ -6,6 +6,7 @@ import {Dispatch} from "redux";
 import Button from "../../../../atoms/buttons/buttons";
 import PlayerAddSub from "../../../../components/players/playerAddSub";
 import PlayerSelectTeam from "../../../../components/players/playerSelectTeam";
+import Scoreboard from "../../../../components/scoreboard/scoreboard";
 import {Player} from "../../../../core/model/player";
 import {compareTimestamps, getDateFromTimestamp} from "../../../../core/momentHelper";
 import {getGame} from "../../../../core/store/actions/gameActions";
@@ -122,15 +123,6 @@ class GameScore extends React.Component<Props, State> {
         };
     }
 
-    getScore(players: Player[]) {
-        return players.map((player) => player.value)
-            .reduce((total, value) => {
-                total = total != null ? total : 0;
-                value = value != null ? value : 0;
-                return total + value;
-            }, 0);
-    }
-
     onAdd(player: Player) {
         const {dispatch} = this.props;
         player.addScore(dispatch);
@@ -157,30 +149,6 @@ class GameScore extends React.Component<Props, State> {
         if (this.state.step < 1) {
             this.setState({step: this.state.step + 1});
         }
-    }
-
-    getScoreBoard(playersHome: Player[], playersAway: Player[]) {
-        return <Paper className={"paper"}>
-            <Grid container={true}>
-                <Grid item={true} xs={12}>
-                    <Typography color="textSecondary">ID: {this.state.gameId}</Typography>
-                </Grid>
-                <Grid item={true} xs={12} sm={true} container={true} justify="space-around" alignItems="center">
-                    <Grid item={true}>
-                        <Typography color="textSecondary">Home</Typography>
-                        <Typography variant="subtitle1">
-                            {this.getScore(playersHome)}
-                        </Typography>
-                    </Grid>
-                    <Grid item={true}>
-                        <Typography color="textSecondary">Away</Typography>
-                        <Typography variant="subtitle1">
-                            {this.getScore(playersAway)}
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Paper>;
     }
 
     getTeamBoard(availablePlayers: any) {
@@ -281,7 +249,8 @@ class GameScore extends React.Component<Props, State> {
 
         const teamBoard = this.state.step === 0 ? this.getTeamBoard(availablePlayers) : "";
 
-        const scoreBoard = this.state.step === 1 ? this.getScoreBoard(playersHome, playersAway) : "";
+        const scoreBoard = this.state.step === 1 ?
+            <Scoreboard playersHome={playersHome} playersAway={playersAway} gameId={this.state.gameId}/> : "";
         const playerBoard = this.state.step === 1 ? this.getPlayerBoard(playersHome, playersAway) : "";
         const activityBoard = this.state.step === 1 ? this.getActivityBoard() : "";
 
