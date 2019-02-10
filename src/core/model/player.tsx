@@ -6,7 +6,7 @@ export class Player {
     firstName: string | null = null;
     value: number | null = null;
     gameId: string | null = null;
-    team: string | null = null;
+    team: string;
     serieId: string | null = null;
     groupId: string | null = null;
 
