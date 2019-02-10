@@ -1,6 +1,6 @@
 import firebase from "firebase";
-import { SET_SERIES } from "../reducers/SeriesReducer";
-import { SET_SERIE } from "../reducers/SerieReducer";
+import { SET_SERIES } from "../reducers/seriesReducer";
+import { SET_SERIE } from "../reducers/serieReducer";
 import {snackbarError, snackbarMsg} from './SnackbarActions'
 
 

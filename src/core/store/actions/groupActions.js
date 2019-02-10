@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { SET_GROUPS } from "../reducers/GroupReducer";
+import { SET_GROUPS } from "../reducers/groupReducer";
 import { snackbarMsg, snackbarError } from './SnackbarActions'
 
 

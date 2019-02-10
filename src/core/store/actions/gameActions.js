@@ -1,8 +1,8 @@
 import firebase from "firebase";
 // import { SET_GAMES } from '../reducers/GameReducer';
-import { snackbarError, snackbarMsg } from './SnackbarActions'
-import { SET_GAMES } from '../reducers/AllGamesReducer';
-import { SET_GAME } from '../reducers/GameReducer';
+import {snackbarError, snackbarMsg} from './SnackbarActions'
+import {SET_GAMES} from '../reducers/allGamesReducer';
+import {SET_GAME} from '../reducers/gameReducer';
 
 
 const setGames = (payload) => ({

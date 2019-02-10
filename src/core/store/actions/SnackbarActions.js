@@ -1,4 +1,4 @@
-import { SNACKBAR_MSG, SNACKBAR_CLOSE , SNACKBAR_ERROR } from '../reducers/SnackbarReducer';
+import { SNACKBAR_MSG, SNACKBAR_CLOSE , SNACKBAR_ERROR } from '../reducers/snackbarReducer';
 
 const snackbarMsg = (payload) => ({
     type: SNACKBAR_MSG,

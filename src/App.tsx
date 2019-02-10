@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import SnackBar from './components/snackbar/Snackbar'
-import Router from "./Router";
-import store from "./core/store/store";
+import React, {Component} from "react";
+import SnackBar from "./components/snackbar/Snackbar";
 import {saveStateToLocalStorage} from "./core/store/localStorage";
+import store from "./core/store/store";
+import Router from "./Router";
 
 let timestampLastUpdate = new Date().getTime();
 
@@ -14,7 +14,7 @@ class App extends Component {
                 this.resetTimestamp();
                 saveStateToLocalStorage({
                     auth: store.getState().auth,
-                    timestamp: this.getTime()
+                    timestamp: this.getTime(),
                 });
             }
         });
@@ -38,8 +38,8 @@ class App extends Component {
                 <Router/>
                 <SnackBar/>
             </div>
-        )
-    };
+        );
+    }
 }
 
 export default App;

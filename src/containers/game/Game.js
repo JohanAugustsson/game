@@ -7,7 +7,7 @@ import {getGamesFromDatabase, removeListener} from '../../core/store/actions/gam
 import {addScoreActivityToGame} from '../../core/store/actions/gameActivityActions'
 import Button from '../../atoms/buttons/buttons';
 import GameView from './GameView';
-import PlayerAddSub from "../../components/players/PlayerAddSub";
+import PlayerAddSub from "../../components/players/playerAddSub";
 
 class Game extends Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { SET_USERS } from '../reducers/UsersReducer';
+import { SET_USERS } from '../reducers/usersReducer';
 
 const setUsers = (payload) => ({
   type: SET_USERS,

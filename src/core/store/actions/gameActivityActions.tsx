@@ -1,20 +1,21 @@
 import firebase from "firebase";
-import {GAME_ACTIVITY_ADD_ALL, GAME_ACTIVITY_ADD_SCORE} from "../reducers/GameActivityReducer";
+import {Player} from "../../model/player";
+import {GAME_ACTIVITY_ADD_ALL, GAME_ACTIVITY_ADD_SCORE} from "../reducers/gameActivityReducer";
 
 const COLLECTION_NAME = "gameActivity";
 
-const addScoreActivity = (payload) => ({
+const addScoreActivity = (payload: any) => ({
+    payload,
     type: GAME_ACTIVITY_ADD_SCORE,
-    payload
 });
 
-const addGameActivities = (payload) => ({
+const addGameActivities = (payload: any) => ({
+    payload,
     type: GAME_ACTIVITY_ADD_ALL,
-    payload
 });
 
-const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
-    let gameActivity = {};
+const addScoreActivityToGame = (player: Player, value: number) => async (dispatch: any) => {
+    const gameActivity: any = {};
     gameActivity.type = "SCORE";
     gameActivity.gameId = player.gameId;
     gameActivity.serieId = player.serieId;
@@ -30,24 +31,24 @@ const addScoreActivityToGame = ({player, value}) => async (dispatch) => {
         gameActivity.createdAt = firebase.firestore.Timestamp.now();
         dispatch(addScoreActivity(gameActivity));
     }).catch((error) => {
-        console.log('addScoreActivityToGame error:', error);
+        console.log("addScoreActivityToGame error:", error);
     });
 };
 
-const getGameActivitiesByGameId = (gameId) => async (dispatch) => {
+const getGameActivitiesByGameId = (gameId: string) => async (dispatch: any) => {
     return getGameActivitiesFromFirestore(gameId).then((actions) => {
         dispatch((addGameActivities(actions)));
     });
 };
 
-function getGameActivitiesFromFirestore(gameId) {
+function getGameActivitiesFromFirestore(gameId: any) {
     return firebase.firestore()
         .collection(COLLECTION_NAME)
-        .where('gameId', '==', gameId)
+        .where("gameId", "==", gameId)
         .get()
-        .then(function (querySnapshot) {
-            const gameActivities = {};
-            querySnapshot.forEach(function (doc) {
+        .then((querySnapshot) => {
+            const gameActivities: any = {};
+            querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
                 gameActivities[doc.id] = doc.data();
             });
@@ -55,8 +56,8 @@ function getGameActivitiesFromFirestore(gameId) {
         });
 }
 
-let unsubscribe = false;
-const listenAtActivity = (gameId) => async (dispatch) => {
+let unsubscribe: any = false;
+const listenAtActivity = (gameId: any) => async (dispatch: any) => {
 
     if (unsubscribe) {
         unsubscribe();
@@ -65,13 +66,13 @@ const listenAtActivity = (gameId) => async (dispatch) => {
         .collection(COLLECTION_NAME)
         .where("gameId", "==", gameId)
         .orderBy("createdAt", "desc")
-        .onSnapshot(function (snapshot) {
+        .onSnapshot((snapshot) => {
             let addedActivities = {};
-            snapshot.docChanges().forEach(function (change) {
-                let changedActivity = change.doc.data();
+            snapshot.docChanges().forEach((change) => {
+                const changedActivity = change.doc.data();
 
                 if (change.type === "added") {
-                    addedActivities = Object.assign({}, addedActivities, {[changedActivity.id]: changedActivity});
+                    addedActivities = {...addedActivities, [changedActivity.id]: changedActivity};
                 }
             });
 
@@ -80,7 +81,7 @@ const listenAtActivity = (gameId) => async (dispatch) => {
 };
 
 const removeActivityListener = () => {
-    console.log('ta bort listener för: ' + COLLECTION_NAME);
+    console.log("ta bort listener för: " + COLLECTION_NAME);
     if (unsubscribe) {
         return unsubscribe();
     }
@@ -91,7 +92,6 @@ export {
     addScoreActivity,
     addGameActivities,
     addScoreActivityToGame,
-    getGameActivitiesByGameId,
     listenAtActivity,
-    removeActivityListener
+    removeActivityListener,
 };

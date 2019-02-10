@@ -3,7 +3,7 @@ import {
     GAMEPLAYER_ADD_PLAYER,
     GAMEPLAYER_ADD_UPDATE_PLAYERS,
     GAMEPLAYER_INIT_PLAYERS
-} from "../reducers/GamePlayerReducer";
+} from "../reducers/gamePlayerReducer";
 
 const COLLECTION_NAME = "gamePlayers";
 
