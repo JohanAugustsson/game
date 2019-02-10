@@ -1,14 +1,13 @@
-import {Divider, Grid, List, ListItem, ListSubheader, Paper, Typography} from "@material-ui/core";
 import * as React from "react";
 import {connect} from "react-redux";
 import {RouteComponentProps} from "react-router";
 import {Dispatch} from "redux";
 import Button from "../../../../atoms/buttons/buttons";
-import PlayerAddSub from "../../../../components/players/playerAddSub";
-import PlayerSelectTeam from "../../../../components/players/playerSelectTeam";
+import ActivityList from "../../../../components/activityList/activityList";
 import Scoreboard from "../../../../components/scoreboard/scoreboard";
+import TeamPlayerActionBoard from "../../../../components/teamPlayerActionBoard/teamPlayerActionBoard";
+import TeamPlayerBoard from "../../../../components/teamPlayerBoard/teamPlayerBoard";
 import {Player} from "../../../../core/model/player";
-import {compareTimestamps, getDateFromTimestamp} from "../../../../core/momentHelper";
 import {getGame} from "../../../../core/store/actions/gameActions";
 import {listenAtActivity, removeActivityListener} from "../../../../core/store/actions/gameActivityActions";
 import {
@@ -151,108 +150,27 @@ class GameScore extends React.Component<Props, State> {
         }
     }
 
-    getTeamBoard(availablePlayers: any) {
-        return <Grid container={true}>
-            <Grid item={true} xs={12} sm={12}>
-                <Typography variant={"headline"}>Test</Typography>
-            </Grid>
-            <Grid item={true} xs={12} sm={6}>
-                <Paper className={"paper"}>
-                    <List>
-                        <ListSubheader>Select Team</ListSubheader>
-                        {this.listAvailablePlayers(availablePlayers)}
-                    </List>
-                </Paper>
-            </Grid>
-        </Grid>;
-    }
-
-    getActivityBoard() {
-        const {activities, users} = this.props;
-        if (!activities) {
-            return;
-        }
-        const acts = Object.keys(activities).map((activity) => activities[activity]).sort(compareTimestamps);
-        return <Grid container={true}>
-            <Grid item={true} xs={12} sm={12}>
-                <Typography variant={"headline"}/>
-            </Grid>
-            <Grid item={true} xs={12} sm={12}>
-                <Paper className={"paper"}>
-                    <Typography>Activities in game</Typography>
-                    <Grid item={true} xs={true} container={true} direction={"row"}>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            <span>Name</span>
-                        </Grid>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            <span>Value</span>
-                        </Grid>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            Team
-                        </Grid>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            <span>Type</span>
-                        </Grid>
-                        <Grid item={true} xs={4} sm={4} className={"grid-flex-center"}>
-                            Date
-                        </Grid>
-                    </Grid>
-                    <List style={{maxHeight: 300, overflow: "auto"}}>
-                        {this.getActiitiesForActivityBoard(acts, users)}
-                    </List>
-                </Paper>
-            </Grid>
-        </Grid>;
-    }
-
-    getPlayerList(playersHome: Player[]) {
-        return playersHome.map((player, i) =>
-            <div key={i}>
-                <Divider/>
-                <ListItem>
-                    <PlayerAddSub
-                        player={player}
-                        onAdd={() => this.onAdd(player)}
-                        onSubstract={() => this.onSub(player)}
-                    />
-                </ListItem>
-            </div>,
-        );
-    }
-
-    getPlayerBoard(playersHome: Player[], playersAway: Player[]) {
-        return <Grid container={true}>
-            <Grid item={true} xs={12} sm={6}>
-                <Paper className={"paper"}>
-                    <List>
-                        <ListSubheader>Home</ListSubheader>
-                        {this.getPlayerList(playersHome)}
-                    </List>
-                </Paper>
-            </Grid>
-            <Grid item={true} xs={12} sm={6}>
-                <Paper className={"paper"}>
-                    <List>
-                        <ListSubheader>Away</ListSubheader>
-                        {this.getPlayerList(playersAway)}
-                    </List>
-                </Paper>
-            </Grid>
-        </Grid>;
-    }
-
     render() {
         const plays = this.renderPlayer();
         const availablePlayers = this.getAvailablePlayers();
         const playersHome = plays.filter((player) => player.isHome());
         const playersAway = plays.filter((player) => player.isAway());
 
-        const teamBoard = this.state.step === 0 ? this.getTeamBoard(availablePlayers) : "";
+        const teamBoard = <TeamPlayerBoard
+            players={availablePlayers}
+            onToggleChange={(team: string, player: Player) => this.onToggleChange(team, player)}
+        />;
 
-        const scoreBoard = this.state.step === 1 ?
-            <Scoreboard playersHome={playersHome} playersAway={playersAway} gameId={this.state.gameId}/> : "";
-        const playerBoard = this.state.step === 1 ? this.getPlayerBoard(playersHome, playersAway) : "";
-        const activityBoard = this.state.step === 1 ? this.getActivityBoard() : "";
+        const scoreBoard = <Scoreboard playersHome={playersHome} playersAway={playersAway} gameId={this.state.gameId}/>;
+
+        const playerBoard = <TeamPlayerActionBoard
+            playersHome={playersHome}
+            playersAway={playersAway}
+            onAdd={(player: Player) => this.onAdd(player)}
+            onSub={(player: Player) => this.onSub(player)}
+        />;
+
+        const activityBoard = <ActivityList activities={this.props.activities} users={this.props.users}/>;
 
         return (
             <div className={"root"}>
@@ -264,67 +182,13 @@ class GameScore extends React.Component<Props, State> {
                         <Button size="small" onClick={() => this.onNext()} color="secondary"> Next</Button>
                     </div>
                 </div>
-                {scoreBoard}
-                {playerBoard}
-                {teamBoard}
-                {activityBoard}
+                {this.state.step === 0 ? teamBoard : ""}
+                {this.state.step === 1 ? scoreBoard : ""}
+                {this.state.step === 1 ? playerBoard : ""}
+                {this.state.step === 1 ? activityBoard : ""}
             </div>
         );
     }
-
-    private getActiitiesForActivityBoard(acts: any, users: any) {
-        return acts.map((activity: any, i: number) =>
-            <div key={i}>
-                <Divider/>
-                <ListItem>
-                    <Grid item={true} xs={true} container={true} direction={"row"}>
-                        <Grid
-                            style={{textAlign: "left"}}
-                            item={true}
-                            xs={2}
-                            sm={2}
-                            className={"grid-flex-center"}
-                        >
-                            <span>{users[activity.userUid].firstName}</span>
-                        </Grid>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            <span>{activity.value}</span>
-                        </Grid>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            <span>{activity.team}</span>
-                        </Grid>
-                        <Grid item={true} xs={2} sm={2} className={"grid-flex-center"}>
-                            <span>{activity.type}</span>
-                        </Grid>
-                        <Grid
-                            style={{textAlign: "right"}}
-                            item={true}
-                            xs={4}
-                            sm={4}
-                            className={"grid-flex-center"}
-                        >
-                            {getDateFromTimestamp(activity.createdAt)}
-                        </Grid>
-                    </Grid>
-                </ListItem>
-            </div>,
-        );
-    }
-
-    private listAvailablePlayers(availablePlayers: any) {
-        return Object.keys(availablePlayers).map((key: string, i) =>
-            <div key={i}>
-                <Divider/>
-                <ListItem>
-                    <PlayerSelectTeam
-                        player={availablePlayers[key]}
-                        onToogleChange={(team) => this.onToggleChange(team, availablePlayers[key])}
-                    />
-                </ListItem>
-            </div>,
-        );
-    }
-
 }
 
 const mapStateToProps = ({gameActivities, game, gamePlayer, seriePlayer, users}: ApplicationState) => ({
